@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Curriculum Genome | Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* UChicago primary palette: Maroon #800000, Light Greystone #D9D9D9, Dark Greystone #737373.
+   Secondary accents (used sparingly): Brick #A4343A, Light Brick #B46A55, Dark Brick #643335,
+   Goldenrod #EAAA00, Lake #007396, Light Lake #3EB1C8, Dark Lake #002A3A. */
+:root {
+  --maroon: #800000;
+  --bg: #FFFFFF;
+  --band: #F4F4F4;
+  --panel: #FFFFFF;
+  --ink: #1F1F1F;
+  --muted: #5E5E5E;
+  --rule: #D9D9D9;
+  --accent: #800000;
+  --accent-ink: #FFFFFF;
+  --gold: #EAAA00;
+  --lake: #007396;
+  --h1: #D9D9D9; --h2: #B46A55; --h3: #A4343A; --h4: #800000; --h5: #643335;
+  --paper: #F7F3EA; --paper-ink: #2B2622; --paper-rule: #CBBFA6;
+  --card: #FFFFFF; --card-line: #9FCFDB; --card-top: #A4343A;
+  --shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.08);
+  --serif: "EB Garamond", "Adobe Garamond Pro", Garamond, Georgia, serif;
+  --sans: Montserrat, "Gotham", Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1C1C1C;
+    --band: #232323;
+    --panel: #262626;
+    --ink: #EDEDED;
+    --muted: #A8A8A8;
+    --rule: #3B3B3B;
+    --accent: #B46A55;
+    --accent-ink: #1C1C1C;
+    --gold: #EAAA00;
+    --lake: #3EB1C8;
+    --h1: #643335; --h2: #800000; --h3: #A4343A; --h4: #B46A55; --h5: #ECA154;
+    --paper: #2E2A24; --paper-ink: #E8E1D3; --paper-rule: #5A5245;
+    --card: #2A2A2A; --card-line: #2E5B66; --card-top: #B46A55;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--lake); outline-offset: 2px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+.serif { font-family: var(--serif); }
+
+/* Brand bar */
+.brandbar { background: var(--maroon); color: #fff; }
+.brandbar .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 52px; gap: 16px; }
+.wordmark { font-family: var(--serif); font-size: 1.25rem; letter-spacing: .01em; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 12px; }
+.wordmark .shieldph { width: 26px; height: 30px; border: 1.5px solid rgba(255,255,255,.75); border-radius: 2px 2px 13px 13px; display: inline-block; }
+.brandbar .unit { font-size: .8125rem; opacity: .9; }
+.proto { background: var(--gold); color: #1F1F1F; font-size: .8125rem; }
+.proto .wrap { padding-top: 7px; padding-bottom: 7px; display: flex; gap: 10px; flex-wrap: wrap; }
+.proto strong { font-weight: 700; }
+
+/* Hero */
+.hero { padding: 64px 0 40px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 48px; align-items: end; }
+.kicker { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--muted); margin: 0 0 6px; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.75rem, 6.4vw, 5.25rem); line-height: .98; margin: 0 0 18px; letter-spacing: -.01em; }
+.lede { font-size: 1.0625rem; color: var(--muted); max-width: 58ch; margin: 0 0 26px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 2px; border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: .875rem; cursor: pointer; text-decoration: none; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn:hover { filter: brightness(1.08); }
+.btn svg { width: 14px; height: 14px; fill: currentColor; }
+.bignum { border-left: 4px solid var(--maroon); padding-left: 22px; }
+.bignum .pair { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; }
+.bignum .n { font-family: var(--serif); font-size: clamp(3rem, 6vw, 4.75rem); line-height: 1; color: var(--accent); }
+.bignum .arrow { font-family: var(--serif); font-size: 2rem; color: var(--muted); }
+.bignum p { margin: 10px 0 0; color: var(--muted); max-width: 38ch; }
+
+/* Section nav */
+.secnav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+.secnav .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.secnav a { flex: none; padding: 14px 12px; font-size: .8125rem; font-weight: 500; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; }
+.secnav a:hover { color: var(--ink); }
+.secnav a.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Sections */
+section.block { padding: 64px 0; border-bottom: 1px solid var(--rule); }
+section.block.alt { background: var(--band); }
+.sec-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.9rem, 3.4vw, 2.6rem); line-height: 1.1; margin: 0 0 8px; }
+.sub { color: var(--muted); margin: 0; max-width: 64ch; }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 1.375rem; margin: 0 0 8px; }
+
+/* Segmented controls & selects */
+.toolbar { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; font-size: .8125rem; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 2px; overflow: hidden; }
+.seg button { border: 0; background: transparent; padding: 7px 12px; cursor: pointer; color: var(--muted); font-size: .8125rem; font-weight: 500; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+select, input[type=number], input[type=search], input[type=text] { font: inherit; font-size: .875rem; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 2px; background: var(--panel); color: var(--ink); }
+.legend { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 18px; height: 10px; display: inline-block; }
+.legend .hatch { background: repeating-linear-gradient(45deg, var(--muted) 0 1px, transparent 1px 4px); opacity: .7; }
+
+/* Genome */
+.genome { display: grid; grid-template-columns: 220px minmax(0, 1fr); margin-top: 18px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 10px 0 8px; background: var(--panel); }
+.glabels { padding-top: 46px; }
+.glabels button { display: block; width: 100%; height: 22px; text-align: right; padding: 0 14px 0 0; border: 0; background: none; cursor: pointer; font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+.glabels button:hover { color: var(--accent); }
+.glabels button[aria-pressed="true"] { color: var(--accent); font-weight: 700; }
+.glabels button.dim { opacity: .38; }
+.gscroll { overflow-x: auto; }
+#gsvg { display: block; cursor: crosshair; }
+svg text { font-family: var(--sans); font-size: 10.5px; fill: var(--muted); }
+.grow { transition: opacity .25s; }
+.grow.dim { opacity: .22; }
+.cell { transition: opacity .2s; }
+.playrow { display: flex; align-items: center; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+.playrow input[type=range] { flex: 1; min-width: 220px; accent-color: var(--maroon); }
+.yearbig { font-family: var(--serif); font-size: 2rem; line-height: 1; min-width: 4ch; color: var(--accent); }
+.hint { font-size: .78rem; color: var(--muted); margin-top: 10px; }
+kbd { font-family: var(--sans); font-size: .72rem; border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; background: var(--panel); }
+
+/* Catalog */
+.cat-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 40px; }
+.tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 22px; }
+.tile { background: var(--panel); padding: 14px 14px 12px; }
+.tile .v { font-family: var(--serif); font-size: 1.9rem; line-height: 1.05; }
+.tile .k { font-size: .75rem; color: var(--muted); margin-top: 4px; }
+.tile .d { font-size: .72rem; margin-top: 2px; color: var(--lake); }
+.catlist { background: var(--panel); border: 1px solid var(--rule); padding: 8px 22px 18px; max-height: 640px; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; align-items: start; }
+.catgroup { break-inside: avoid; padding-top: 14px; }
+.catgroup .gh { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border-bottom: 1px solid var(--rule); padding-bottom: 3px; margin-bottom: 4px; }
+.catgroup .gh span { font-size: .75rem; font-weight: 600; color: var(--muted); }
+.pagebtn { border: 0; background: none; color: var(--lake); font-size: .72rem; cursor: pointer; padding: 0; white-space: nowrap; }
+.pagebtn:hover { text-decoration: underline; }
+.catgroup ul { list-style: none; margin: 0; padding: 0; }
+.catgroup li button { border: 0; background: none; padding: 1px 0; cursor: pointer; text-align: left; font-family: var(--serif); font-size: 1.02rem; line-height: 1.45; color: var(--ink); }
+.catgroup li button:hover { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; }
+.flag { font-family: var(--serif); font-style: italic; font-size: .85rem; margin-left: 6px; color: var(--h3); }
+.flag.last { color: var(--lake); }
+.semline { font-size: .78rem; color: var(--muted); }
+.missing { padding: 28px; border: 1px dashed var(--muted); color: var(--muted); background: var(--panel); }
+.side h3 { margin-top: 0; }
+.preview { position: relative; background: var(--paper); color: var(--paper-ink); border: 1px solid var(--paper-rule); box-shadow: var(--shadow); padding: 28px 30px 34px; font-family: var(--serif); cursor: zoom-in; min-height: 360px; }
+.preview::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 30% 10%, transparent 55%, rgba(120,90,40,.10)), radial-gradient(ellipse at 90% 95%, rgba(120,90,40,.12), transparent 40%); }
+.cite-box { margin-top: 16px; font-size: .8125rem; border-left: 3px solid var(--lake); padding: 8px 12px; background: var(--panel); }
+.cite-box code { font-family: var(--serif); font-size: .95rem; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: .75rem; margin-top: 12px; color: var(--muted); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* Facsimile page (shared by preview and modal) */
+.fx-head { text-align: center; border-bottom: 1px double var(--paper-rule); padding-bottom: 10px; margin-bottom: 14px; }
+.fx-head .u { font-variant: small-caps; letter-spacing: .08em; font-size: .95rem; }
+.fx-head .t { font-size: 1.35rem; margin-top: 2px; }
+.fx-head .s { font-style: italic; font-size: .9rem; }
+.fx-sub { font-variant: small-caps; letter-spacing: .06em; text-align: center; margin: 12px 0 8px; font-size: 1rem; }
+.fx-entry { margin: 0 0 9px; font-size: .95rem; line-height: 1.38; text-align: justify; hyphens: auto; }
+.fx-entry b { font-weight: 600; }
+.fx-foot { text-align: center; margin-top: 16px; font-size: .85rem; }
+
+/* Modal */
+.modal { position: fixed; inset: 0; background: rgba(20,10,10,.62); display: none; align-items: center; justify-content: center; z-index: 50; padding: 24px; }
+.modal.open { display: flex; }
+.modal .frame { width: min(680px, 100%); max-height: 92vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+.modal .sheet { background: var(--paper); color: var(--paper-ink); overflow-y: auto; padding: 40px 52px 36px; position: relative; font-family: var(--serif); }
+.modal .bar { padding: 10px 14px; background: var(--maroon); color: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; font-family: var(--sans); font-size: .8125rem; gap: 10px; }
+.modal .bar button:disabled { opacity: .4; cursor: default; }
+.modal .bar button { background: transparent; border: 1px solid rgba(255,255,255,.6); color: #fff; padding: 4px 10px; cursor: pointer; border-radius: 2px; font-size: .78rem; }
+
+/* Compare */
+.yourclass { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--maroon); color: #fff; padding: 18px 22px; margin-bottom: 26px; }
+.yourclass label { font-family: var(--serif); font-size: 1.25rem; }
+.yourclass input { width: 100px; }
+.yourclass .btn { background: #fff; color: var(--maroon); border-color: #fff; }
+.yourclass .msg { flex-basis: 100%; font-size: .9375rem; opacity: .95; }
+.yourclass .msg:empty { display: none; }
+.cmp-col .became { font-family: var(--sans); font-size: .72rem; color: var(--lake); margin-left: 4px; text-decoration: none; display: inline-block; }
+.cmp-pick { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; font-size: .875rem; color: var(--muted); }
+.cmp-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 26px; }
+.ctile { border-top: 3px solid var(--maroon); padding-top: 10px; }
+.ctile .k { font-size: .75rem; color: var(--muted); }
+.ctile .row { display: flex; align-items: baseline; gap: 10px; font-family: var(--serif); }
+.ctile .a { font-size: 1.15rem; color: var(--muted); }
+.ctile .b { font-size: 1.9rem; }
+.ctile .chg { font-family: var(--sans); font-size: .78rem; color: var(--lake); font-weight: 600; }
+.cmp-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.cmp-col { background: var(--panel); border: 1px solid var(--rule); padding: 16px 18px; max-height: 420px; overflow-y: auto; }
+.cmp-col h3 { font-size: 1.15rem; display: flex; justify-content: space-between; align-items: baseline; }
+.cmp-col h3 span { font-family: var(--sans); font-size: .75rem; color: var(--muted); }
+.cmp-col ul { margin: 0; padding: 0; list-style: none; font-family: var(--serif); font-size: 1rem; line-height: 1.5; }
+.cmp-col.gone li { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--h3); }
+.cmp-col.new li::before { content: "+ "; color: var(--h3); font-family: var(--sans); font-weight: 700; }
+
+/* Lineage */
+.lin-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 36px; }
+.searchrow { display: flex; gap: 10px; margin-bottom: 10px; }
+.searchrow input { flex: 1; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.chips button { border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 4px 12px; cursor: pointer; font-size: .78rem; }
+.chips button:hover, .chips button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+#lsvg text.t { font-family: var(--serif); font-size: 14.5px; fill: var(--ink); }
+#lsvg .bar { cursor: pointer; }
+.lin-detail { background: var(--panel); border: 1px solid var(--rule); padding: 18px; font-size: .875rem; align-self: start; position: sticky; top: 70px; }
+.lin-detail .ttl { font-family: var(--serif); font-size: 1.3rem; line-height: 1.2; margin-bottom: 4px; }
+.lin-detail dl { margin: 12px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; }
+.lin-detail dt { color: var(--muted); font-size: .78rem; }
+.lin-detail dd { margin: 0; }
+.empty { color: var(--muted); padding: 10px 0; }
+
+/* Faculty */
+.fac-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; }
+.profile { background: var(--panel); border: 1px solid var(--rule); padding: 20px 22px; }
+.profile .nm { font-family: var(--serif); font-size: 1.75rem; line-height: 1.1; }
+.profile .meta { color: var(--muted); font-size: .8125rem; margin: 4px 0 14px; }
+.mini { margin-bottom: 18px; }
+.mini .lbl { display: flex; justify-content: space-between; font-size: .78rem; color: var(--muted); margin-bottom: 4px; }
+.mini .lbl b { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); font-weight: 500; }
+
+/* Tuition */
+.tu-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: start; }
+.tu-note { font-size: .875rem; color: var(--muted); }
+.tu-read { font-family: var(--serif); font-size: 1.2rem; line-height: 1.4; border-left: 3px solid var(--gold); padding-left: 14px; margin-bottom: 14px; color: var(--ink); }
+
+/* Words */
+.decades { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; border: 1px solid var(--rule); background: var(--rule); }
+.dec { padding: 14px 14px 16px; min-height: 200px; background: var(--panel); overflow: hidden; }
+.dec .y { font-size: .75rem; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+.dec .w { font-family: var(--serif); line-height: 1.12; margin-bottom: 5px; max-width: 100%; overflow-wrap: anywhere; cursor: pointer; display: block; border: 0; background: none; padding: 0; text-align: left; color: var(--ink); }
+.dec .w:hover { color: var(--accent); }
+
+/* Lost courses: catalog cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 18px; }
+.icard { position: relative; background: var(--card); box-shadow: var(--shadow); padding: 16px 18px 38px 30px; min-height: 190px; border: 0; cursor: pointer; text-align: left; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; font: inherit; color: inherit; transition: transform .15s; }
+.icard::before { content: ""; position: absolute; left: 50%; bottom: 10px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--band); box-shadow: inset 0 1px 2px rgba(0,0,0,.25); }
+.icard .call { position: absolute; left: 6px; top: 12px; writing-mode: vertical-rl; transform: rotate(180deg); font-size: .68rem; color: var(--muted); }
+.icard .ct { font-family: var(--serif); font-size: 1.3rem; line-height: 1.15; margin-bottom: 4px; }
+.icard .cy { font-size: .78rem; color: var(--muted); font-weight: 500; padding-bottom: 8px; border-bottom: 1.5px solid var(--card-top); }
+.icard .cd { font-family: var(--serif); font-style: italic; font-size: .95rem; color: var(--muted); line-height: 22px; padding-top: 2px; background-image: repeating-linear-gradient(to bottom, transparent 0 21px, var(--card-line) 21px 22px); }
+.icard:hover { transform: translateY(-2px); }
+
+/* Data section */
+.data-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 44px; }
+.steps { list-style: none; padding: 0; margin: 0; counter-reset: s; }
+.steps li { counter-increment: s; position: relative; padding: 0 0 18px 48px; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: -2px; width: 32px; height: 32px; border-radius: 50%; background: var(--maroon); color: #fff; font-family: var(--serif); font-size: 1.15rem; display: flex; align-items: center; justify-content: center; }
+.steps li b { display: block; font-family: var(--serif); font-size: 1.15rem; font-weight: 500; }
+.steps li span { color: var(--muted); font-size: .875rem; }
+.qstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+.qstats > div { border-top: 3px solid var(--lake); padding-top: 8px; }
+.qstats .v { font-family: var(--serif); font-size: 2rem; line-height: 1; }
+.qstats .k { font-size: .75rem; color: var(--muted); }
+.dl-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
+/* Footer */
+footer.site { background: #2B2B2B; color: #D9D9D9; padding: 36px 0 44px; font-size: .8125rem; }
+footer.site .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+footer.site .fw { font-family: var(--serif); font-size: 1.15rem; color: #fff; }
+
+/* Tooltip, toast, tour, help */
+.tip { position: fixed; z-index: 60; pointer-events: none; background: #1F1F1F; color: #fff; padding: 7px 10px; border-radius: 2px; font-size: .78rem; line-height: 1.4; opacity: 0; max-width: 300px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.tip b { font-weight: 600; }
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: var(--maroon); color: #fff; padding: 10px 18px; font-size: .875rem; opacity: 0; transition: .25s; z-index: 70; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%); }
+.tour { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); width: min(760px, calc(100% - 32px)); background: var(--panel); border: 1px solid var(--rule); border-top: 4px solid var(--maroon); box-shadow: 0 16px 48px rgba(0,0,0,.28); z-index: 40; padding: 18px 22px; display: none; }
+.tour.open { display: block; }
+.tour .tt { font-family: var(--serif); font-size: 1.45rem; line-height: 1.15; margin-bottom: 6px; }
+.tour p { margin: 0 0 14px; color: var(--muted); }
+.tour .nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.tour .pips { display: flex; gap: 6px; }
+.tour .pips i { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+.tour .pips i.on { background: var(--maroon); }
+.help { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 80; display: none; align-items: center; justify-content: center; }
+.help.open { display: flex; }
+.help .box { background: var(--panel); padding: 26px 30px; width: min(420px, 92vw); border-top: 4px solid var(--maroon); }
+.help table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.help td { padding: 6px 0; border-bottom: 1px solid var(--rule); }
+.help td:first-child { width: 130px; }
+.helpfab { position: fixed; right: 18px; bottom: 18px; width: 38px; height: 38px; border-radius: 50%; background: var(--maroon); color: #fff; border: 0; cursor: pointer; font-weight: 700; z-index: 30; box-shadow: var(--shadow); }
+
+@media (max-width: 980px) {
+  .hero-grid, .cat-grid, .lin-grid, .fac-grid, .tu-grid, .data-grid { grid-template-columns: 1fr; }
+  .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .catlist { grid-template-columns: 1fr; }
+  .cmp-cols, .cmp-tiles { grid-template-columns: 1fr 1fr; }
+  .decades { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .genome { grid-template-columns: 140px minmax(0, 1fr); }
+  .lin-detail { position: static; }
+}
+@media (max-width: 600px) { .cmp-cols, .cmp-tiles, .qstats { grid-template-columns: 1fr; } .tiles { grid-template-columns: 1fr 1fr; } }
+@media (prefers-reduced-motion: reduce) { .grow, .cell, .toast, .icard { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="brandbar">
+  <div class="wrap">
+    <a class="wordmark" href="#top" aria-label="The University of Chicago Law School"><span class="shieldph" aria-hidden="true" title="Placeholder for official logo"></span>The University of Chicago Law School</a>
+    <span class="unit">D'Angelo Law Library</span>
+  </div>
+</header>
+<div class="proto"><div class="wrap"><strong>Prototype for discussion.</strong> Every course, person, figure, and description on this page is invented. Only the five dated school events are real.</div></div>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="kicker">125 years, 1902 to 2027</p>
+      <h1>The Curriculum Genome</h1>
+      <p class="lede">Every course in every Announcement the Law School has published, rebuilt as data. See what students studied in any year, compare your class with today, and follow courses as they were born, renamed, and retired.</p>
+      <div class="actions">
+        <button class="btn" id="tourBtn" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg>Take the guided tour</button>
+        <a class="btn ghost" href="#compare">Find your class</a>
+        <button class="btn ghost" id="heroPlay" type="button">Watch 125 years unfold</button>
+      </div>
+    </div>
+    <div class="bignum">
+      <div class="pair"><span class="n" id="n1902">0</span><span class="arrow">to</span><span class="n" id="n2027">0</span></div>
+      <p id="bignumNote">courses offered in 1902, and courses offered today.</p>
+    </div>
+  </div>
+</section>
+
+<nav class="secnav" aria-label="Sections">
+  <div class="wrap">
+    <a href="#genome">The genome</a><a href="#catalog">Open a catalog</a><a href="#compare">Then and now</a><a href="#lineage">Course lineage</a><a href="#faculty">Faculty</a><a href="#tuition">Tuition</a><a href="#words">Words of the decade</a><a href="#lost">Lost courses</a><a href="#data">About the data</a>
+  </div>
+</nav>
+
+<section class="block" id="genome">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2>Every course, every year</h2>
+        <p class="sub">Each row is a subject and each column one academic year. Stronger color means more courses. Hover to read a cell, click to open that year's catalog, click a subject name to trace its lineage.</p>
+      </div>
+    </div>
+    <div class="toolbar">
+      <span>Show</span>
+      <div class="seg" id="metricSeg" role="group" aria-label="Metric">
+        <button type="button" data-m="count" aria-pressed="true">Number of courses</button>
+        <button type="button" data-m="share" aria-pressed="false">Share of curriculum</button>
+      </div>
+      <label>Sort rows <select id="sortSel">
+        <option value="subject">By subject</option>
+        <option value="first">By first appearance</option>
+        <option value="growth">By growth since 1960</option>
+      </select></label>
+      <span class="legend" id="legend"></span>
+      <span class="legend"><i class="hatch"></i>No catalog located</span>
+    </div>
+    <div class="genome">
+      <div class="glabels" id="glabels"></div>
+      <div class="gscroll"><svg id="gsvg" role="img" aria-label="Heat map of courses offered by subject and year"></svg></div>
+    </div>
+    <div class="playrow">
+      <button class="btn" id="playBtn" type="button" aria-label="Play timelapse"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg><span>Play</span></button>
+      <input type="range" id="yearRange" min="1902" max="2027" value="1959" aria-label="Year">
+      <span class="yearbig" id="yearBig">1959</span>
+    </div>
+    <p class="hint"><kbd>←</kbd> <kbd>→</kbd> move a year, <kbd>Shift</kbd> moves a decade, <kbd>Space</kbd> plays, <kbd>?</kbd> shows all shortcuts. The page address updates as you explore, so any view can be shared as a link.</p>
+  </div>
+</section>
+
+<section class="block alt" id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2 id="catTitle">The 1959–60 Announcement</h2>
+        <p class="sub" id="catSub"></p>
+      </div>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <div class="cat-grid">
+      <div id="catBody"></div>
+      <aside class="side">
+        <h3>Behind every record, a page</h3>
+        <p class="sub" style="margin-bottom:14px">Each course links to the scanned catalog page it came from. Click the page to read it.</p>
+        <div class="preview" id="preview" tabindex="0" role="button" aria-label="Open scanned page"></div>
+        <div class="cite-box"><div style="color:var(--muted);margin-bottom:4px">Cite this page</div><code id="citeTxt"></code><div style="margin-top:8px"><button class="btn ghost" id="copyCite" type="button" style="padding:5px 10px;font-size:.75rem">Copy citation</button></div></div>
+        <div class="status" id="pageStatus"></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="compare">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Then and now</h2><p class="sub">Put any two years side by side. Alumni can start with the year they arrived.</p></div></div>
+    <div class="yourclass">
+      <label for="classYear">I graduated in</label>
+      <input type="number" id="classYear" min="1905" max="2030" placeholder="1987">
+      <button class="btn" id="classGo" type="button">Compare with today</button>
+      <div class="msg" id="classMsg" aria-live="polite"></div>
+    </div>
+    <div class="cmp-pick">
+      <label>Compare <select id="cmpA"></select></label>
+      <label>with <select id="cmpB"></select></label>
+      <button class="btn ghost" id="swapBtn" type="button" style="padding:6px 12px">Swap</button>
+    </div>
+    <div class="cmp-tiles" id="cmpTiles"></div>
+    <div class="cmp-cols">
+      <div class="cmp-col gone"><h3>Gone <span id="cGoneN"></span></h3><ul id="cGone"></ul></div>
+      <div class="cmp-col"><h3>Survived <span id="cBothN"></span></h3><ul id="cBoth"></ul></div>
+      <div class="cmp-col new"><h3>Arrived <span id="cNewN"></span></h3><ul id="cNew"></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="lineage">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Course lineage</h2><p class="sub">Courses rarely die outright. Most are renamed, split, or absorbed. Curved lines connect a course to its successor. Click any bar for details.</p></div></div>
+    <div class="lin-grid">
+      <div>
+        <div class="searchrow"><input type="search" id="linQ" placeholder="Search course titles" aria-label="Search course titles"></div>
+        <div class="chips" id="chips"></div>
+        <div id="linWrap"><svg id="lsvg" aria-label="Course lifespans"></svg></div>
+      </div>
+      <aside class="lin-detail" id="linDetail" aria-live="polite"></aside>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="faculty">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>The people who taught it</h2><p class="sub">Every name listed as an instructor, linked to the courses they taught. Pick a professor to see a teaching career at a glance.</p></div></div>
+    <div class="fac-grid">
+      <div>
+        <div class="toolbar" style="margin-bottom:14px"><label>Professor <input type="text" id="facQ" list="facList" placeholder="Type a name" style="width:260px"></label><datalist id="facList"></datalist><button class="btn ghost" id="facRand" type="button" style="padding:6px 12px">Surprise me</button></div>
+        <div class="profile" id="profile"></div>
+      </div>
+      <div>
+        <div class="mini"><div class="lbl"><span>Faculty listed in the catalog</span><b id="mFac"></b></div><svg id="chFac"></svg></div>
+        <div class="mini"><div class="lbl"><span>Entering class</span><b id="mEnt"></b></div><svg id="chEnt"></svg></div>
+        <div class="mini"><div class="lbl"><span>Students per faculty member</span><b id="mRat"></b></div><svg id="chRat"></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block alt" id="tuition">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>The cost of a year</h2><p class="sub">Annual tuition as printed in each catalog, with an inflation adjustment to 2027 dollars.</p></div>
+      <div class="seg" id="tuSeg" role="group" aria-label="Dollars"><button type="button" data-t="real" aria-pressed="true">2027 dollars</button><button type="button" data-t="nominal" aria-pressed="false">As printed</button></div>
+    </div>
+    <div class="tu-grid">
+      <div id="tuWrap"><svg id="tuSvg" aria-label="Tuition over time"></svg></div>
+      <div><div class="tu-read" id="tuRead"></div><p class="tu-note">Adjusted with the Consumer Price Index. Early catalogs sometimes listed fees by quarter, and those are converted to annual totals. Hover the chart to read any year.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="words">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Words of the decade</h2><p class="sub">The words in course titles most characteristic of each decade compared with the whole 125 years. Larger means more distinctive. Click a word to search for it.</p></div></div>
+    <div class="decades" id="decades"></div>
+  </div>
+</section>
+
+<section class="block alt" id="lost">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>Lost courses</h2><p class="sub">The card catalog of the departed. Some courses vanished with the problems they addressed. Others live on under new names.</p></div>
+      <div class="seg" id="lostSeg" role="group" aria-label="Filter"><button type="button" data-f="extinct" aria-pressed="true">Truly extinct</button><button type="button" data-f="renamed" aria-pressed="false">Renamed</button><button type="button" data-f="new" aria-pressed="false">Newest arrivals</button></div>
+    </div>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section class="block" id="data">
+  <div class="wrap">
+    <div class="sec-head"><div><h2>About the data</h2><p class="sub">How the genome is built, how much of it a librarian has checked, and how to use it in your own work.</p></div></div>
+    <div class="data-grid">
+      <ol class="steps">
+        <li><b>Gather every Announcement</b><span>Scans from Chicago Unbound and the library's print run, with gaps flagged where no copy has been located.</span></li>
+        <li><b>Read the pages</b><span>Optical character recognition turns each scan into text, keeping a link to the exact page.</span></li>
+        <li><b>Extract course records</b><span>An AI model pulls each course's title, instructor, credits, and description into a structured record.</span></li>
+        <li><b>Librarian review</b><span>Every record is checked against the page image before it is marked verified. Unverified records are labeled as such.</span></li>
+        <li><b>Subjects and lineage</b><span>Library staff assign each course to a subject and link renamed courses to their successors, using a documented scheme.</span></li>
+        <li><b>Publish and correct</b><span>The dataset is released openly, and anyone can report an error from any record.</span></li>
+      </ol>
+      <div>
+        <div class="qstats" id="qstats"></div>
+        <svg id="qSvg" aria-label="Verification status by decade"></svg>
+        <div class="legend" style="margin-top:8px;font-size:.75rem;color:var(--muted);gap:14px"><span class="legend"><i style="background:var(--maroon)"></i>Verified</span><span class="legend"><i style="background:var(--h1)"></i>Machine-extracted</span><span class="legend"><i class="hatch"></i>Catalog missing</span></div>
+        <div class="cite-box" style="margin-top:22px"><div style="color:var(--muted);margin-bottom:4px">Cite the dataset</div><code>D'Angelo Law Libr., Univ. of Chi. L. Sch., The Curriculum Genome, 1902–2027 (2027), https://doi.org/10.0000/placeholder.</code></div>
+        <div class="dl-row"><button class="btn" id="dlCsv" type="button">Download CSV</button><button class="btn ghost" id="dlJson" type="button">Download JSON</button><a class="btn ghost" href="mailto:?subject=Curriculum%20Genome%20correction">Report an error</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div><div class="fw">D'Angelo Law Library</div><div>The University of Chicago Law School, 1111 East 60th Street, Chicago</div></div>
+    <div style="max-width:52ch">A prototype prepared for the Law School's 125th anniversary. All data shown is invented for demonstration and does not describe real courses or people.</div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Scanned catalog page"><div class="frame"><div class="bar" id="mbar"></div><div class="sheet" id="sheet"></div></div></div>
+<div class="tour" id="tour" role="dialog" aria-label="Guided tour"></div>
+<div class="help" id="help" role="dialog" aria-label="Keyboard shortcuts"><div class="box">
+  <h3>Keyboard shortcuts</h3>
+  <table>
+    <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Previous or next year</td></tr>
+    <tr><td><kbd>Shift</kbd> + arrow</td><td>Jump a decade</td></tr>
+    <tr><td><kbd>Space</kbd></td><td>Play or pause the timelapse</td></tr>
+    <tr><td><kbd>T</kbd></td><td>Start the guided tour</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>Close any panel</td></tr>
+    <tr><td><kbd>?</kbd></td><td>Show this list</td></tr>
+  </table>
+  <div style="margin-top:16px"><button class="btn" type="button" id="helpClose">Close</button></div>
+</div></div>
+<button class="helpfab" id="helpFab" type="button" aria-label="Keyboard shortcuts">?</button>
+<div class="tip" id="tip"></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/* ======================= MOCK DATA ======================= */
+/* Everything below is invented for demonstration, except EVENTS. */
+const Y0 = 1902, Y1 = 2027;
+const YEARS = Array.from({ length: Y1 - Y0 + 1 }, (_, i) => Y0 + i);
+const MISSING = new Set([1919, 1945]);           // catalogs "not located"
+const WAR = new Set([1918, 1943, 1944]);          // electives suspended
+const ay = y => `${y}–${String(y + 1).slice(2)}`;
+
+function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function hash(...n) { let h = 2166136261; for (const v of n) { h ^= v; h = Math.imul(h, 16777619); } return ((h >>> 0) % 100000) / 100000; }
+
+const SUBJECTS = [
+  "Property", "Contracts and commercial", "Torts", "Criminal law", "Procedure and pleading",
+  "Evidence", "Constitutional law", "Administrative and public law", "Business associations",
+  "Taxation", "Antitrust and regulation", "Labor and employment", "Law and economics",
+  "Legal history and jurisprudence", "International and comparative", "Family and persons",
+  "Civil rights and equality", "Environment and resources", "Intellectual property",
+  "Technology and data", "Research and writing", "Clinics and practice"
+];
+const SEM_TOPICS = [
+  ["Land Title Problems", "Housing Markets", "Property Theory", "Takings"],
+  ["Contract Theory", "Commercial Arbitration", "Consumer Finance", "Sovereign Debt"],
+  ["Mass Torts", "Insurance and Risk", "Tort Reform", "Medical Liability"],
+  ["Sentencing", "Wrongful Convictions", "Punishment Theory", "White-Collar Crime"],
+  ["Class Actions", "Judicial Behavior", "Federal Courts Workshop", "Litigation Finance"],
+  ["Expert Testimony", "Forensic Proof"],
+  ["Constitutional Theory", "The Supreme Court Term", "Separation of Powers", "State Constitutions"],
+  ["Regulatory Design", "Agency Practice", "Statutory Drafting", "Local Government"],
+  ["Corporate Governance", "Shareholder Activism", "Bankruptcy Reorganization", "Private Equity"],
+  ["Tax Policy", "Estate Planning", "Partnership Tax"],
+  ["Merger Policy", "Platform Competition", "Financial Regulation"],
+  ["Collective Bargaining", "The Gig Economy", "Workplace Privacy"],
+  ["Price Theory Workshop", "Law and Behavior", "Contract Economics", "Political Economy"],
+  ["Legal Classics", "Natural Law", "Constitutional History", "Legal Realism"],
+  ["International Arbitration", "Human Rights", "Trade Law", "Comparative Constitutions"],
+  ["Reproductive Rights", "Child Welfare", "Elder Law"],
+  ["Race and the Law", "Election Law", "Religious Liberty", "Policing"],
+  ["Water Rights", "Energy Markets", "Climate Litigation"],
+  ["Patent Litigation", "Art Law", "Entertainment Law"],
+  ["Algorithms and Law", "Data Governance", "Platform Liability", "Digital Evidence"],
+  ["Legal Research Methods", "Persuasive Writing", "Judicial Opinion Writing"],
+  ["Negotiation", "Mediation", "Transactional Lawyering"]
+];
+
+// [title, subject, first, last, core, predecessor title]
+const RAW = [
+  ["Property I",0,1902,2027,1],["Property II",0,1902,1975],["Real Property Conveyancing",0,1902,1948],
+  ["Future Interests",0,1910,1985],["Wills and Trusts",0,1902,2027],["Mortgages",0,1902,1940],
+  ["Land Use Regulation",0,1968,2027],["Real Estate Transactions",0,1976,2027,0,"Real Property Conveyancing"],
+  ["Contracts",1,1902,2027,1],["Quasi-Contracts",1,1902,1958],["Restitution",1,1959,2027,0,"Quasi-Contracts"],
+  ["Sales",1,1902,1962],["Bills and Notes",1,1902,1955],["Commercial Paper",1,1956,1990,0,"Bills and Notes"],
+  ["Payment Systems",1,1991,2027,0,"Commercial Paper"],["Secured Transactions",1,1962,2027,0,"Sales"],["Suretyship",1,1902,1938],
+  ["Insurance",1,1906,1980],["Consumer Law",1,1974,2027],
+  ["Torts",2,1902,2027,1],["Damages",2,1902,1952],["Carriers",2,1902,1934],
+  ["Products Liability",2,1966,2010],["Accident Law",2,2011,2027,0,"Products Liability"],
+  ["Criminal Law",3,1902,2027,1],["Criminal Procedure",3,1925,1974],["Criminology",3,1930,1972],
+  ["Criminal Procedure I: Investigation",3,1975,2027,0,"Criminal Procedure"],["Criminal Procedure II: Adjudication",3,1975,2027,0,"Criminal Procedure"],
+  ["Policing and the Constitution",3,2016,2027],
+  ["Common Law Pleading",4,1902,1931,1],["Code Pleading",4,1904,1938,0,"Common Law Pleading"],["Equity",4,1902,1950],
+  ["Civil Procedure",4,1939,2027,1,"Code Pleading"],["Federal Jurisdiction",4,1912,2027],["Conflict of Laws",4,1905,2027],
+  ["Remedies",4,1951,2027,0,"Equity"],["Complex Litigation",4,1985,2027],["Bankruptcy",4,1934,2027],
+  ["Evidence",5,1902,2027],["Scientific Evidence",5,1995,2027],
+  ["Constitutional Law",6,1902,2027],["Constitutional Law: Free Speech",6,1960,2027],
+  ["Religion Clauses",6,1985,2027],["Constitutional Law: Equal Protection",6,1965,2027],
+  ["Municipal Corporations",7,1902,1960],["Public Officers",7,1904,1935],
+  ["Administrative Law",7,1920,2027,0,"Public Officers"],["Legislation",7,1910,1955],
+  ["Legislation and Statutory Interpretation",7,1990,2027,0,"Legislation"],["Local Government Law",7,1961,2027,0,"Municipal Corporations"],
+  ["Private Corporations",8,1902,1950],["Partnership",8,1902,1950],["Business Associations",8,1951,2027,0,"Private Corporations"],
+  ["Corporate Finance",8,1960,2027],["Securities Regulation",8,1936,2027],
+  ["Mergers and Acquisitions",8,1985,2027],["Venture Capital",8,2005,2027],
+  ["Taxation",9,1918,1955],["Federal Income Tax",9,1956,2027,0,"Taxation"],["Corporate Tax",9,1960,2027],
+  ["International Tax",9,1990,2027],["Estate and Gift Tax",9,1948,2027],
+  ["Public Service Companies",10,1906,1940],["Trade Regulation",10,1925,1945],["Antitrust",10,1946,2027,0,"Trade Regulation"],
+  ["Regulated Industries",10,1960,2000,0,"Public Service Companies"],["Banking Regulation",10,1975,2027],
+  ["Master and Servant",11,1902,1925],["Labor Law",11,1935,2027,0,"Master and Servant"],
+  ["Employment Discrimination",11,1970,2027],["Employment Law",11,1990,2027],
+  ["Economic Analysis of Law",12,1939,2027],["Price Theory for Lawyers",12,1946,2027],
+  ["Law and Economics Workshop",12,1965,2027],["Behavioral Law and Economics",12,2000,2027],
+  ["Empirical Legal Studies",12,2008,2027],
+  ["Roman Law",13,1902,1950],["Jurisprudence",13,1902,2027],["History of English Law",13,1902,1965],
+  ["American Legal History",13,1950,2027,0,"History of English Law"],["Legal Ethics",13,1920,1974],
+  ["Professional Responsibility",13,1975,2027,0,"Legal Ethics"],["Law and Philosophy",13,1975,2027],
+  ["International Law",14,1902,2027],["Comparative Law",14,1910,2027],
+  ["Foreign Relations Law",14,1975,2027],["European Union Law",14,1995,2027],["Chinese Law",14,2008,2027],
+  ["Persons",15,1902,1922],["Domestic Relations",15,1923,1970,0,"Persons"],["Family Law",15,1971,2027,0,"Domestic Relations"],
+  ["Children and the Law",15,1985,2027],
+  ["Civil Rights",16,1960,2027],["Sex Discrimination and the Law",16,1972,2010],
+  ["Gender and the Law",16,2011,2027,0,"Sex Discrimination and the Law"],["Voting Rights",16,1975,2027],["Immigration Law",16,1980,2027],
+  ["Disability Law",16,1995,2027],
+  ["Mining and Water Law",17,1902,1925],["Oil and Gas",17,1925,1965,0,"Mining and Water Law"],["Environmental Law",17,1970,2027],
+  ["Energy Law",17,1978,2027,0,"Oil and Gas"],["Climate Change Law",17,2012,2027],
+  ["Patents",18,1910,1960],["Patent Law",18,1961,2027,0,"Patents"],["Copyright",18,1950,2027],
+  ["Trademark and Unfair Competition",18,1975,2027],["Intellectual Property Survey",18,1990,2027],
+  ["Law and Computers",19,1984,1998],["Cyberlaw",19,1999,2015,0,"Law and Computers"],["Privacy Law",19,2002,2027],
+  ["Cybersecurity Law",19,2015,2027,0,"Cyberlaw"],["Artificial Intelligence and the Law",19,2018,2027],
+  ["AI and Legal Practice",19,2024,2027],
+  ["Legal Bibliography",20,1910,1937],["Legal Research and Writing",20,1938,2027,1,"Legal Bibliography"],
+  ["Moot Court",20,1925,2027],["Legal Drafting",20,1960,2027],["Advanced Legal Research",20,1985,2027],
+  ["Legal Aid Clinic",21,1957,1990],["Criminal Defense Clinic",21,1990,2027,0,"Legal Aid Clinic"],["Trial Advocacy",21,1972,2027],
+  ["Entrepreneurship Clinic",21,1998,2027],["Housing Clinic",21,2005,2027],
+  ["Immigrants' Rights Clinic",21,2008,2027],["Appellate Clinic",21,2010,2027],
+  ["Environmental Clinic",21,2012,2027]
+];
+const COURSES = RAW.map(([t, s, a, b, core, from], i) => ({ id: i, t, s, a, b, core: !!core, fromT: from || null }));
+const byTitle = Object.fromEntries(COURSES.map(c => [c.t, c]));
+COURSES.forEach(c => { c.from = c.fromT ? byTitle[c.fromT].id : null; c.to = []; });
+COURSES.forEach(c => { if (c.from !== null) COURSES[c.from].to.push(c.id); });
+COURSES.forEach(c => { c.credits = c.core ? 4 : (hash(c.id, 7) > .5 ? 3 : 2); c.num = 300 + c.s * 20 + (c.id % 17); c.verified = hash(c.id, 99) > .28; });
+
+function active(c, y) {
+  if (y < c.a || y > c.b) return false;
+  if (!c.core && c.a >= 1905 && WAR.has(y)) return false;
+  return true;
+}
+function seminarList(s, y) {
+  if (y < 1950 || WAR.has(y)) return [];
+  if (!COURSES.some(c => c.s === s && active(c, y))) return [];
+  const n = Math.floor((1 + (y - 1950) / 19) * (0.55 + 0.45 * hash(s, Math.floor(y / 5), 3)));
+  const topics = SEM_TOPICS[s], out = [];
+  const start = Math.floor(hash(s, Math.floor(y / 5), 8) * topics.length);
+  for (let i = 0; i < n && i < topics.length; i++) out.push("Seminar: " + topics[(start + i) % topics.length]);
+  return out;
+}
+
+/* Grid values */
+const GRID = SUBJECTS.map((_, s) => YEARS.map(y => {
+  const n = COURSES.filter(c => c.s === s && active(c, y)).length;
+  const k = seminarList(s, y).length;
+  return { n, k, v: n + k };
+}));
+const YEAR_TOTAL = YEARS.map((_, i) => GRID.reduce((a, r) => a + r[i].v, 0));
+
+/* Enrollment, faculty, tuition */
+const ENTER = YEARS.map(y => {
+  let e = 60 + 140 * (1 - Math.exp(-(y - Y0) / 45));
+  if (y === 1918) e *= .45; if (y === 1943 || y === 1944) e *= .35; if (y === 1945) e *= .6;
+  return Math.round(e * (0.96 + hash(y, 11) * .08));
+});
+const FIRST = ["Walter","Harold","Arthur","Francis","Samuel","Edwin","Floyd","Chester","Horace","Clarence","Oscar","Ernest","Wendell","Edith"];
+const MID = ["Leonard","Raymond","Howard","Philip","Gerald","Martin","Richard","Bernard","Stanley","Miriam","Ruth","Norman","Irving","Kenneth","Dorothy"];
+const LATE = ["Stephen","David","Michael","Carol","Ellen","Douglas","Laura","Jonathan","Susan","Mark","Diane","Peter","Elizabeth","Robert","Lorraine","Victor"];
+const NEW = ["Rachel","Daniel","Priya","Mei","Aisha","Benjamin","Sofia","Nathan","Ana","Julian","Grace","Omar","Hannah","Tariq","Leah","Wei","Camila","Kwame"];
+const LAST = ["Ashby","Pruitt","Lindqvist","Calloway","Thorne","Whitcombe","Haverford","Brannigan","Okafor","Delacroix","Marwick","Sutter","Kessler","Rourke","Ainsley","Bramwell","Castellano","Dunmore","Ellery","Fairbanks","Galloway","Hartigan","Iverson","Jansky","Kowalczyk","Lachance","Merriam","Nakashima","Oyelaran","Pellegrini","Quist","Radcliffe","Sandoval","Tolliver","Underhill","Varga","Wexley","Yarrow","Zeller","Abernathy","Birchall","Corwin","Draycott","Fennimore","Greaves","Holloway","Ibarra","Jessup","Kincaid","Loomis","Mattingly","Northrup","Ostrander","Prescott","Stoddard","Truitt","Voss","Winslow","Yeager","Banerjee","Deverell","Eklund","Farrow","Gutierrez","Hadley","Juarez","Lowell","Moreau","Nwosu","Ortega","Petrakis","Rasmussen","Saito","Tanaka","Valdez","Whitaker","Achterberg","Brightwell","Castellanos","Dimitriou","Engstrom","Faraday","Gallardo","Hollis","Ishikawa","Kaminski","Lindgren","Mbeki","Novak","Okonkwo","Paredes","Rinaldi","Sorensen","Takahashi","Udall","Vasquez","Wendt","Yilmaz","Zubiri"];
+const FAC = [];
+(function genFaculty() {
+  const r = mulberry(1902), used = new Set();
+  const target = y => Math.round(8 + 67 * Math.pow((y - Y0) / (Y1 - Y0), 1.6)) - (WAR.has(y) ? 3 : 0);
+  const pick = arr => arr[Math.floor(r() * arr.length)];
+  let act = [];
+  for (const y of YEARS) {
+    act = act.filter(f => f.end >= y);
+    while (act.length < target(y)) {
+      const pool = y < 1940 ? FIRST : y < 1975 ? MID : y < 2002 ? LATE : NEW;
+      let nm, tries = 0;
+      do { nm = `${pick(pool)} ${String.fromCharCode(65 + Math.floor(r() * 23))}. ${pick(LAST)}`; tries++; } while (used.has(nm) && tries < 40);
+      used.add(nm);
+      const live = SUBJECTS.map((_, s) => s).filter(s => COURSES.some(c => c.s === s && c.a <= y + 3 && c.b >= y));
+      const s1 = pick(live); let s2 = pick(live); if (s2 === s1) s2 = pick(live);
+      const len = 10 + Math.floor(r() * 30);
+      const f = { id: FAC.length, name: nm, last: nm.split(" ").pop(), start: y, end: Math.min(y + len, 2045), subj: [...new Set([s1, s2])], teach: [] };
+      FAC.push(f); act.push(f);
+    }
+  }
+})();
+FAC.forEach(f => { f.endShown = f.end > Y1 ? null : f.end; });
+const FAC_COUNT = YEARS.map(y => FAC.filter(f => f.start <= y && f.end >= y).length);
+
+/* Instructor assignment: continuity with occasional handoffs */
+const TEACH = {}; // courseId -> [{f, from, to}]
+COURSES.forEach(c => {
+  const segs = []; let cur = null;
+  for (let y = c.a; y <= c.b; y++) {
+    if (!active(c, y)) continue;
+    const ok = f => f && f.start <= y && f.end >= y;
+    if (!ok(cur) || hash(c.id, y, 5) < .02) {
+      let cands = FAC.filter(f => ok(f) && f.subj.includes(c.s));
+      if (!cands.length) cands = FAC.filter(ok);
+      cur = cands[Math.floor(hash(c.id, y, 9) * cands.length)];
+    }
+    const last = segs[segs.length - 1];
+    if (last && last.f === cur.id) last.to = y; else segs.push({ f: cur.id, from: y, to: y });
+  }
+  TEACH[c.id] = segs;
+  segs.forEach(sg => FAC[sg.f].teach.push({ c: c.id, from: sg.from, to: sg.to }));
+});
+function instructorFor(c, y) { const s = (TEACH[c.id] || []).find(g => g.from <= y && g.to >= y); return s ? FAC[s.f] : null; }
+
+/* Tuition (as printed) and CPI */
+const TU_KNOTS = [[1902,150],[1915,180],[1920,225],[1930,300],[1940,375],[1946,450],[1955,780],[1960,1050],[1970,2400],[1980,5700],[1990,15600],[2000,28500],[2010,47200],[2020,69300],[2027,82500]];
+const CPI_KNOTS = [[1902,8.4],[1913,9.9],[1920,20.0],[1930,16.7],[1933,13.0],[1940,14.0],[1946,19.5],[1950,24.1],[1960,29.6],[1970,38.8],[1980,82.4],[1990,130.7],[2000,172.2],[2010,218.1],[2020,258.8],[2024,313.7],[2027,334]];
+function interp(knots, y, geo) {
+  for (let i = 0; i < knots.length - 1; i++) {
+    const [a, va] = knots[i], [b, vb] = knots[i + 1];
+    if (y >= a && y <= b) { const t = (y - a) / (b - a); return geo ? va * Math.pow(vb / va, t) : va + (vb - va) * t; }
+  }
+  return knots[knots.length - 1][1];
+}
+const TUITION = YEARS.map(y => { const v = interp(TU_KNOTS, y, true); return v < 1000 ? Math.round(v / 5) * 5 : Math.round(v / 50) * 50; });
+const CPI = YEARS.map(y => interp(CPI_KNOTS, y, false));
+const REAL = TUITION.map((t, i) => t * CPI[CPI.length - 1] / CPI[i]);
+
+/* Catalog page numbers per subject per year */
+function pageFor(s, y) { return 12 + s * 2 + Math.floor((y - Y0) / 15); }
+
+/* Mock description generator */
+const DESC_EARLY = ["Lectures and the study of cases, with frequent recitations.", "The principles of the subject as developed in the leading English and American decisions.", "Study of selected cases, with exercises in the drafting of instruments.", "A survey of the doctrines, with attention to the statutes of Illinois.", "Text: a collection of cases prepared for the use of the class.", "Open to second-year students and to graduates of approved schools.", "Weekly written exercises are required.", "The history of the subject is traced from its origins in the common law."];
+const DESC_MID = ["The course examines the leading problems of the field through cases and statutory materials.", "Emphasis is placed on the economic and social setting of the rules.", "Problems are assigned for written analysis in advance of class discussion.", "The materials include legislative history and administrative practice.", "Attention is given to recent decisions of the federal courts.", "The course is designed to follow the first-year course in the same field.", "Students prepare memoranda on assigned problems.", "Comparative materials from other jurisdictions are used throughout."];
+const DESC_LATE = ["Students write a substantial paper.", "The course uses simulations and draws on empirical research.", "Grading is based on a take-home examination and class participation.", "Readings combine doctrine with work from economics and political theory.", "Enrollment is limited, and priority goes to second-year students.", "Guest practitioners join several sessions.", "Students complete a series of short drafting exercises.", "No prerequisites, though the first-year core is assumed."];
+function descFor(c, y) {
+  const pool = y < 1940 ? DESC_EARLY : y < 1980 ? DESC_MID : DESC_LATE;
+  const a = pool[Math.floor(hash(c.id, Math.floor(y / 10)) * pool.length)];
+  const b = pool[Math.floor(hash(c.id, Math.floor(y / 10), 2) * pool.length)];
+  return a === b ? a : a + " " + b;
+}
+const QUARTERS = ["Autumn", "Winter", "Spring"];
+
+/* Real events (true dates) */
+const EVENTS = [
+  [1902, "The Law School opens"],
+  [1904, "Moves into Stuart Hall"],
+  [1933, "First volume of the Law Review"],
+  [1939, "Law and Economics Program established"],
+  [1959, "Moves into the Saarinen building"]
+];
+/* ======================= APP ======================= */
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+function S(tag, attrs = {}, parent) { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+function H(tag, props = {}, kids = []) { const n = document.createElement(tag); for (const k in props) { if (k === "text") n.textContent = props[k]; else if (k === "html") n.innerHTML = props[k]; else if (k.startsWith("on")) n.addEventListener(k.slice(2), props[k]); else n.setAttribute(k, props[k]); } (Array.isArray(kids) ? kids : [kids]).forEach(c => c != null && n.append(c)); return n; }
+const fmt$ = v => "$" + Math.round(v).toLocaleString("en-US");
+const pct = v => Math.round(v * 100) === 0 ? "no change" : (v > 0 ? "+" : "") + Math.round(v * 100) + "%";
+const yi = y => y - Y0;
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const state = { dimOn: false, year: 1959, metric: "count", sort: "subject", sel: { type: "course", id: byTitle["Payment Systems"].id }, cmpA: 1984, cmpB: 2027, fac: null, tu: "real", lost: "extinct", page: 1, playing: false };
+
+/* Tooltip & toast */
+const tip = $("tip");
+function showTip(e, html) { tip.innerHTML = html; const w = tip.offsetWidth; let x = e.clientX + 14; if (x + w > innerWidth - 8) x = e.clientX - w - 14; tip.style.left = x + "px"; tip.style.top = (e.clientY + 16) + "px"; tip.style.opacity = 1; }
+function hideTip() { tip.style.opacity = 0; }
+let toastT; function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1900); }
+function copy(text, msg) { (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast(msg), () => { const ta = H("textarea"); ta.value = text; document.body.append(ta); ta.select(); try { document.execCommand("copy"); toast(msg); } catch (e) { toast("Select the text to copy it"); } ta.remove(); }); }
+
+/* ---------- Selection helpers ---------- */
+const ALIASES = {
+  pleading: ["pleading", "civil procedure", "equity", "remedies"],
+  family: ["persons", "domestic relations", "family", "children"],
+  commercial: ["bills and notes", "commercial paper", "payment systems", "sales", "secured", "suretyship"],
+  computer: ["computer", "cyber", "privacy", "artificial intelligence", "ai and"],
+  discrimination: ["discrimination", "gender", "civil rights", "disability", "voting", "equal protection"],
+  clinic: ["clinic", "legal aid", "trial advocacy"],
+  tax: ["tax"],
+  economics: ["econom", "price theory", "empirical"]
+};
+function lineageOf(id) {
+  const seen = new Set([id]), q = [id];
+  while (q.length) { const c = COURSES[q.shift()]; [c.from, ...c.to].forEach(n => { if (n !== null && !seen.has(n)) { seen.add(n); q.push(n); } }); }
+  return [...seen].map(i => COURSES[i]);
+}
+function selected() {
+  const s = state.sel;
+  if (!s) return [];
+  if (s.type === "subject") return COURSES.filter(c => c.s === s.id);
+  if (s.type === "course") return lineageOf(s.id);
+  if (s.type === "term") { const t = s.q.toLowerCase(); const keys = ALIASES[t] || [t]; return COURSES.filter(c => keys.some(k => c.t.toLowerCase().includes(k))); }
+  return [];
+}
+
+/* ======================= GENOME ======================= */
+let CW = 7; const RH = 22, HEAD = 46;
+let ORDER = SUBJECTS.map((_, i) => i), THRESH = [], gCells = [];
+function computeOrder() {
+  const firstYear = s => YEARS.find((y, i) => GRID[s][i].v > 0) || 9999;
+  if (state.sort === "first") ORDER = SUBJECTS.map((_, i) => i).sort((a, b) => firstYear(a) - firstYear(b) || a - b);
+  else if (state.sort === "growth") ORDER = SUBJECTS.map((_, i) => i).sort((a, b) => (GRID[b][yi(2027)].v - GRID[b][yi(1960)].v) - (GRID[a][yi(2027)].v - GRID[a][yi(1960)].v));
+  else ORDER = SUBJECTS.map((_, i) => i);
+}
+function val(s, i) { const v = GRID[s][i].v; return state.metric === "share" ? (YEAR_TOTAL[i] ? v / YEAR_TOTAL[i] : 0) : v; }
+function computeThresh() {
+  const vals = [];
+  SUBJECTS.forEach((_, s) => YEARS.forEach((y, i) => { const v = val(s, i); if (v > 0 && !MISSING.has(y)) vals.push(v); }));
+  vals.sort((a, b) => a - b);
+  THRESH = [.2, .45, .7, .9].map(q => vals[Math.floor(q * (vals.length - 1))]);
+}
+function bucket(v) { let b = 1; THRESH.forEach(t => { if (v > t) b++; }); return b; }
+function renderLegend() {
+  const L = $("legend"); L.innerHTML = "";
+  const f = v => state.metric === "share" ? Math.round(v * 100) + "%" : Math.round(v);
+  L.append(H("span", { text: "Fewer" }));
+  [1, 2, 3, 4, 5].forEach(b => L.append(H("i", { style: `background:var(--h${b})`, title: b === 1 ? `up to ${f(THRESH[0])}` : b === 5 ? `more than ${f(THRESH[3])}` : `${f(THRESH[b - 2])} to ${f(THRESH[b - 1])}` })));
+  L.append(H("span", { text: "More" }));
+}
+let yearMark, bandRect, rowGroups = {};
+function renderGenome(animate) {
+  computeOrder(); computeThresh(); renderLegend();
+  const svg = $("gsvg"); svg.innerHTML = "";
+  CW = Math.max(6, svg.parentNode.clientWidth / YEARS.length);
+  const W = YEARS.length * CW, Hh = HEAD + SUBJECTS.length * RH;
+  svg.setAttribute("width", W); svg.setAttribute("height", Hh);
+  const defs = S("defs", {}, svg);
+  const pat = S("pattern", { id: "hatch", width: 4, height: 4, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs);
+  S("rect", { width: 1, height: 4, style: "fill:var(--muted)", opacity: .55 }, pat);
+  for (let y = 1910; y <= Y1; y += 10) { S("text", { x: yi(y) * CW + CW / 2, y: 12, "text-anchor": "middle" }, svg).textContent = y; S("line", { x1: yi(y) * CW + CW / 2, x2: yi(y) * CW + CW / 2, y1: 16, y2: 21, style: "stroke:var(--rule)" }, svg); }
+  bandRect = S("rect", { y: HEAD - 4, height: Hh - HEAD + 4, x: 0, width: 0, style: "fill:var(--gold);fill-opacity:.16;stroke:var(--gold);stroke-width:1" }, svg);
+  MISSING.forEach(y => S("rect", { x: yi(y) * CW, y: HEAD, width: CW - 1, height: Hh - HEAD, fill: "url(#hatch)" }, svg));
+  EVENTS.forEach(([y, label]) => {
+    const x = yi(y) * CW + CW / 2;
+    S("line", { x1: x, x2: x, y1: HEAD - 6, y2: Hh, style: "stroke:var(--lake);stroke-opacity:.45", "stroke-dasharray": "2 3" }, svg);
+    const m = S("circle", { cx: x, cy: HEAD - 14, r: 4.5, style: "fill:var(--lake);cursor:help" }, svg);
+    m.dataset.ev = `<b>${y}</b><br>${label}<br><span style="opacity:.7">Real event</span>`;
+  });
+  gCells = [];
+  rowGroups = {};
+  ORDER.forEach((s, r) => {
+    const g = S("g", { class: "grow" }, svg); rowGroups[s] = g;
+    S("line", { x1: 0, x2: W, y1: HEAD + r * RH + RH / 2, y2: HEAD + r * RH + RH / 2, style: "stroke:var(--rule)", "stroke-opacity": .7 }, g);
+    YEARS.forEach((y, i) => {
+      if (MISSING.has(y)) return;
+      const v = val(s, i); if (!v) return;
+      const c = S("rect", { class: "cell", x: i * CW, y: HEAD + r * RH + 3, width: CW - 1.2, height: RH - 6, style: `fill:var(--h${bucket(v)})` }, g);
+      c.dataset.col = i; gCells.push(c);
+    });
+  });
+  yearMark = S("rect", { y: HEAD - 4, width: CW + 1, height: Hh - HEAD + 4, fill: "none", style: "stroke:var(--ink)", "stroke-width": 1.6 }, svg);
+  const lab = $("glabels"); lab.innerHTML = "";
+  ORDER.forEach(s => lab.append(H("button", { type: "button", "data-s": s, title: `Trace ${SUBJECTS[s].toLowerCase()}`, text: SUBJECTS[s], onclick: () => { state.sel = state.sel && state.sel.type === "subject" && state.sel.id === s ? null : { type: "subject", id: s }; refreshSelection(); } })));
+  placeYearMark(); refreshDim();
+  if (animate && !REDUCED) {
+    gCells.forEach(c => c.style.opacity = 0);
+    const t0 = performance.now(), dur = 1400;
+    (function step(t) { const p = Math.min(1, (t - t0) / dur), lim = p * YEARS.length; gCells.forEach(c => { if (+c.dataset.col <= lim) c.style.opacity = 1; }); if (p < 1) requestAnimationFrame(step); })(t0);
+  }
+}
+function placeYearMark() { if (yearMark) yearMark.setAttribute("x", yi(state.year) * CW - .5); }
+function setBand(r) { if (!bandRect) return; if (!r) { bandRect.setAttribute("width", 0); return; } bandRect.setAttribute("x", yi(r[0]) * CW - 1); bandRect.setAttribute("width", (r[1] - r[0] + 1) * CW + 2); }
+function refreshDim() {
+  const list = state.dimOn ? selected() : [], subs = new Set(list.map(c => c.s)), on = list.length > 0;
+  Object.entries(rowGroups).forEach(([s, g]) => g.classList.toggle("dim", on && !subs.has(+s)));
+  document.querySelectorAll("#glabels button").forEach(b => { const s = +b.dataset.s; b.classList.toggle("dim", on && !subs.has(s)); b.setAttribute("aria-pressed", state.sel && state.sel.type === "subject" && state.sel.id === s ? "true" : "false"); });
+}
+(function bindGenome() {
+  const svg = $("gsvg");
+  svg.addEventListener("mousemove", e => {
+    if (e.target.dataset && e.target.dataset.ev) return showTip(e, e.target.dataset.ev);
+    const r = svg.getBoundingClientRect(), col = Math.floor((e.clientX - r.left) / CW), row = Math.floor((e.clientY - r.top - HEAD) / RH);
+    if (col < 0 || col >= YEARS.length || row < 0 || row >= SUBJECTS.length) return hideTip();
+    const y = YEARS[col], s = ORDER[row];
+    if (MISSING.has(y)) return showTip(e, `<b>${ay(y)}</b><br>No Announcement located for this year`);
+    const d = GRID[s][col], share = YEAR_TOTAL[col] ? d.v / YEAR_TOTAL[col] : 0;
+    let h = `<b>${SUBJECTS[s]}, ${ay(y)}</b><br>${d.n} course${d.n === 1 ? "" : "s"}${d.k ? ` and ${d.k} seminar${d.k === 1 ? "" : "s"}` : ""}<br>${(share * 100).toFixed(1)}% of the curriculum`;
+    if (WAR.has(y)) h += `<br><span style="opacity:.75">Wartime: electives suspended</span>`;
+    showTip(e, h);
+  });
+  svg.addEventListener("mouseleave", hideTip);
+  svg.addEventListener("click", e => { const r = svg.getBoundingClientRect(), col = Math.floor((e.clientX - r.left) / CW); if (col >= 0 && col < YEARS.length) setYear(YEARS[col]); });
+  document.querySelectorAll("#metricSeg button").forEach(b => b.addEventListener("click", () => { state.metric = b.dataset.m; document.querySelectorAll("#metricSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderGenome(false); }));
+  $("sortSel").addEventListener("change", e => { state.sort = e.target.value; renderGenome(false); });
+  $("yearRange").addEventListener("input", e => setYear(+e.target.value));
+})();
+
+/* ======================= YEAR / CATALOG ======================= */
+function setYear(y, opts = {}) {
+  y = Math.max(Y0, Math.min(Y1, y));
+  state.year = y;
+  $("yearRange").value = y; $("yearBig").textContent = y;
+  placeYearMark(); renderCatalog(); renderLinYear(); renderFacCharts(); renderTuition(); if (!opts.noHash) writeHash();
+}
+function coursesIn(y) { return COURSES.filter(c => active(c, y)); }
+function tileHTML(v, k, d) { return `<div class="tile"><div class="v">${v}</div><div class="k">${k}</div>${d ? `<div class="d">${d}</div>` : ""}</div>`; }
+function renderCatalog() {
+  const y = state.year, i = yi(y);
+  $("catTitle").textContent = `The ${ay(y)} Announcement`;
+  const tiles = $("tiles");
+  if (MISSING.has(y)) {
+    $("catSub").textContent = "No copy of this year's Announcement has been located.";
+    tiles.innerHTML = tileHTML("?", "Courses") + tileHTML(FAC_COUNT[i], "Faculty") + tileHTML(ENTER[i], "Entering class") + tileHTML("?", "Tuition as printed") + tileHTML("?", "In 2027 dollars");
+    $("catBody").innerHTML = `<div class="missing"><h3>A gap in the record</h3><p>The library has not found a copy of the ${ay(y)} Announcement in its own holdings or in any other collection searched so far. Gaps like this are shown as hatched columns in the genome.</p><p>If you have one in a family archive, a firm library, or an attic, the library would love to scan it. Use "Report an error" in About the data to get in touch.</p></div>`;
+    renderPreview(null); return;
+  }
+  const on = coursesIn(y), prev = y > Y0 && !MISSING.has(y - 1) ? coursesIn(y - 1) : null;
+  const fresh = prev ? on.filter(c => !prev.includes(c)) : [], gone = prev ? prev.filter(c => !on.includes(c)) : [];
+  let sub = `Published for the academic session of ${ay(y)}.`;
+  if (prev) sub += ` ${fresh.length} course${fresh.length === 1 ? "" : "s"} new or resumed and ${gone.length} dropped since the year before.`;
+  if (WAR.has(y)) sub += " A wartime catalog: only the required courses are offered.";
+  $("catSub").textContent = sub;
+  const pi = i > 0 && !MISSING.has(y - 1) ? i - 1 : null;
+  const dlt = (a, b) => pi === null || !b ? "" : `${pct(a / b - 1)} from ${ay(y - 1)}`;
+  tiles.innerHTML =
+    tileHTML(YEAR_TOTAL[i], "Courses and seminars", dlt(YEAR_TOTAL[i], pi !== null ? YEAR_TOTAL[pi] : 0)) +
+    tileHTML(FAC_COUNT[i], "Faculty listed", dlt(FAC_COUNT[i], pi !== null ? FAC_COUNT[pi] : 0)) +
+    tileHTML(ENTER[i], "Entering class", dlt(ENTER[i], pi !== null ? ENTER[pi] : 0)) +
+    tileHTML(fmt$(TUITION[i]), "Tuition as printed") +
+    tileHTML(fmt$(REAL[i]), "In 2027 dollars");
+  const body = H("div", { class: "catlist" });
+  SUBJECTS.forEach((name, s) => {
+    const list = on.filter(c => c.s === s), sems = seminarList(s, y);
+    if (!list.length && !sems.length) return;
+    const g = H("div", { class: "catgroup" });
+    g.append(H("div", { class: "gh" }, [H("span", { text: name }), H("button", { class: "pagebtn", type: "button", text: `Page ${pageFor(s, y)}`, onclick: () => openPage(s, y) })]));
+    const ul = H("ul");
+    list.forEach(c => {
+      const b = H("button", { type: "button", title: "Trace this course", text: c.t, onclick: () => { state.sel = { type: "course", id: c.id }; refreshSelection(); document.getElementById("lineage").scrollIntoView(); } });
+      b.addEventListener("mouseenter", () => renderPreview(s));
+      const li = H("li", {}, b);
+      if (prev && !prev.includes(c)) li.append(H("span", { class: "flag", text: c.a === y ? "new" : "resumes" }));
+      else if (y < Y1 && c.b === y) li.append(H("span", { class: "flag last", text: "last offered" }));
+      ul.append(li);
+    });
+    if (sems.length) ul.append(H("li", { class: "semline", text: `plus ${sems.length} seminar${sems.length === 1 ? "" : "s"}` }));
+    g.append(ul); body.append(g);
+  });
+  $("catBody").innerHTML = ""; $("catBody").append(body);
+  renderPreview(state.page != null && on.some(c => c.s === state.page) ? state.page : on[0] ? on[0].s : 0);
+}
+
+/* ---------- Facsimile ---------- */
+function fxHTML(s, y, compact) {
+  const list = coursesIn(y).filter(c => c.s === s), sems = seminarList(s, y);
+  let h = `<div class="fx-head"><div class="u">The University of Chicago</div><div class="t">The Law School</div><div class="s">Announcements for the Session of ${ay(y)}</div></div><div class="fx-sub">${SUBJECTS[s]}</div>`;
+  const items = list.slice().sort((a, b) => a.num - b.num).map(c => { const f = instructorFor(c, y); const q = QUARTERS[(c.id + y) % 3]; return `<p class="fx-entry"><b>${c.num}. ${c.t}.</b> ${descFor(c, y)} ${c.credits} hrs. ${q}. ${f ? "Professor " + f.name.split(" ")[0][0] + ". " + f.last : "Staff"}.</p>`; });
+  sems.forEach((t, k) => items.push(`<p class="fx-entry"><b>${400 + s * 10 + k}. ${t}.</b> Limited enrollment. Students write a research paper. 2 hrs. ${QUARTERS[(s + k + y) % 3]}.</p>`));
+  h += (compact ? items.slice(0, 4) : items).join("") || `<p class="fx-entry"><i>No courses offered in this subject this year.</i></p>`;
+  if (compact && items.length > 4) h += `<p class="fx-entry" style="text-align:center"><i>continued</i></p>`;
+  h += `<div class="fx-foot">${pageFor(s, y)}</div>`;
+  return h;
+}
+const citeFor = (s, y) => `Univ. of Chi. L. Sch., Announcements ${ay(y)}, at ${pageFor(s, y)} (${y}).`;
+function renderPreview(s) {
+  const p = $("preview");
+  if (s === null) { p.innerHTML = `<div class="fx-head"><div class="u">The University of Chicago</div><div class="t">The Law School</div><div class="s">Announcements for the Session of ${ay(state.year)}</div></div><p class="fx-entry" style="text-align:center;margin-top:60px"><i>Copy not located</i></p>`; $("citeTxt").textContent = "No page to cite."; $("pageStatus").innerHTML = ""; return; }
+  state.page = s;
+  p.innerHTML = fxHTML(s, state.year, true);
+  $("citeTxt").textContent = citeFor(s, state.year);
+  const list = coursesIn(state.year).filter(c => c.s === s), ver = list.filter(c => c.verified).length;
+  $("pageStatus").innerHTML = `<span class="dot" style="background:${ver === list.length ? "var(--maroon)" : "var(--gold)"}"></span>${ver} of ${list.length} records on this page verified by a librarian`;
+}
+$("preview").addEventListener("click", () => { if (!MISSING.has(state.year)) openPage(state.page, state.year); });
+$("preview").addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (!MISSING.has(state.year)) openPage(state.page, state.year); } });
+$("copyCite").addEventListener("click", () => copy($("citeTxt").textContent, "Citation copied"));
+let modalS = 0;
+function openPage(s, y) {
+  modalS = s; state.page = s;
+  const live = SUBJECTS.map((_, i) => i).filter(i => coursesIn(y).some(c => c.s === i) || seminarList(i, y).length);
+  const k = live.indexOf(s);
+  $("mbar").innerHTML = `<span>Announcements ${ay(y)}, page ${pageFor(s, y)}</span><span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" id="pgPrev" ${k <= 0 ? "disabled" : ""}>Previous page</button><button type="button" id="pgNext" ${k >= live.length - 1 ? "disabled" : ""}>Next page</button><button type="button" id="pgCite">Copy citation</button><button type="button" id="pgClose">Close</button></span>`;
+  $("sheet").innerHTML = fxHTML(s, y, false); $("sheet").scrollTop = 0;
+  $("modal").classList.add("open");
+  $("pgClose").onclick = closeModal; $("pgCite").onclick = () => copy(citeFor(s, y), "Citation copied");
+  $("pgPrev").onclick = () => k > 0 && openPage(live[k - 1], y);
+  $("pgNext").onclick = () => k < live.length - 1 && openPage(live[k + 1], y);
+  $("pgClose").focus();
+}
+function closeModal() { $("modal").classList.remove("open"); renderPreview(state.page); }
+$("modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
+/* ======================= COMPARE ======================= */
+const OK_YEARS = YEARS.filter(y => !MISSING.has(y));
+function fillSelects() {
+  ["cmpA", "cmpB"].forEach(id => { const s = $(id); s.innerHTML = ""; OK_YEARS.forEach(y => s.append(H("option", { value: y, text: ay(y) }))); });
+  $("cmpA").onchange = e => { state.cmpA = +e.target.value; renderCompare(); writeHash(); };
+  $("cmpB").onchange = e => { state.cmpB = +e.target.value; renderCompare(); writeHash(); };
+  $("swapBtn").onclick = () => { [state.cmpA, state.cmpB] = [state.cmpB, state.cmpA]; renderCompare(); writeHash(); };
+}
+function nearestOk(y) { y = Math.max(Y0, Math.min(Y1, y)); while (MISSING.has(y)) y++; return y; }
+function renderCompare() {
+  const A = state.cmpA, B = state.cmpB, ia = yi(A), ib = yi(B);
+  $("cmpA").value = A; $("cmpB").value = B;
+  const tile = (k, a, b, f) => `<div class="ctile"><div class="k">${k}</div><div class="row"><span class="a">${f(a)}</span><span class="b">${f(b)}</span></div><div class="chg">${pct(b / a - 1)}</div></div>`;
+  const n = v => Math.round(v).toLocaleString("en-US");
+  $("cmpTiles").innerHTML = tile("Courses and seminars", YEAR_TOTAL[ia], YEAR_TOTAL[ib], n) + tile("Faculty", FAC_COUNT[ia], FAC_COUNT[ib], n) + tile("Entering class", ENTER[ia], ENTER[ib], n) + tile("Tuition in 2027 dollars", REAL[ia], REAL[ib], fmt$);
+  const a = coursesIn(A), b = coursesIn(B);
+  const sorter = (x, y) => x.s - y.s || x.t.localeCompare(y.t);
+  const fill = (id, list) => { const ul = $(id); ul.innerHTML = ""; list.sort(sorter).forEach(c => { const li = H("li", { title: SUBJECTS[c.s], text: c.t }); if (id === "cGone") { const succ = lineageOf(c.id).filter(x => x.a > c.a && b.includes(x)); if (succ.length) li.append(H("span", { class: "became", text: "now " + succ[0].t })); } ul.append(li); }); $(id + "N").textContent = list.length; };
+  fill("cGone", a.filter(c => !b.includes(c))); fill("cBoth", a.filter(c => b.includes(c))); fill("cNew", b.filter(c => !a.includes(c)));
+}
+$("classGo").addEventListener("click", () => {
+  const g = +$("classYear").value;
+  if (!g || g < 1905 || g > 2030) { $("classMsg").textContent = "Enter a graduation year between 1905 and 2030."; return; }
+  const enter = nearestOk(Math.min(g - 3, Y1 - 1));
+  state.cmpA = enter; state.cmpB = Y1; renderCompare(); writeHash();
+  const ea = coursesIn(enter), eb = coursesIn(Y1), added = eb.filter(c => !ea.includes(c)).sort((x, y) => y.a - x.a);
+  const ex = added.slice(0, 2).map(c => c.t);
+  $("classMsg").textContent = `Your first catalog was ${ay(enter)}. Today's lists ${added.length} courses that did not exist then${ex.length ? `, including ${ex.join(" and ")}` : ""}. A year's tuition has gone from ${fmt$(REAL[yi(enter)])} to ${fmt$(REAL[yi(Y1)])} in 2027 dollars.`;
+});
+$("classYear").addEventListener("keydown", e => { if (e.key === "Enter") $("classGo").click(); });
+
+/* ======================= LINEAGE ======================= */
+const CHIPS = ["pleading", "family", "commercial", "computer", "economics", "discrimination", "clinic", "tax"];
+CHIPS.forEach(t => $("chips").append(H("button", { type: "button", text: t, "data-t": t, onclick: () => { $("linQ").value = t; state.sel = { type: "term", q: t }; refreshSelection(); } })));
+$("linQ").addEventListener("input", e => { const q = e.target.value.trim(); state.sel = q ? { type: "term", q } : null; refreshSelection(); });
+let linX = null, linTop = 0;
+function refreshSelection() { state.dimOn = !!state.sel; renderLineage(); refreshDim(); writeHash(); }
+function renderLineage() {
+  document.querySelectorAll("#chips button").forEach(b => b.setAttribute("aria-pressed", state.sel && state.sel.type === "term" && state.sel.q === b.dataset.t ? "true" : "false"));
+  if (!(state.sel && state.sel.type === "term")) $("linQ").value = "";
+  const list = selected().sort((a, b) => a.a - b.a || a.t.localeCompare(b.t));
+  const wrap = $("linWrap"), svg = $("lsvg"); svg.innerHTML = "";
+  wrap.querySelectorAll(".empty").forEach(n => n.remove());
+  if (!list.length) {
+    svg.setAttribute("height", 0); linX = null;
+    wrap.append(H("p", { class: "empty", text: state.sel && state.sel.type === "term" ? `No course titles contain "${state.sel.q}". Try a broader word, like "law" or "tax".` : "Pick a subject in the genome, click a course in the catalog, or search a title." }));
+    renderLinDetail(null); return;
+  }
+  const W = Math.max(320, wrap.clientWidth), ROW = 42, TOP = 28, Hh = TOP + list.length * ROW + 24;
+  const x = y => (y - Y0) / (Y1 - Y0 + 1) * W; linX = x; linTop = TOP;
+  svg.setAttribute("width", W); svg.setAttribute("height", Hh);
+  for (let y = 1910; y <= 2020; y += 10) { const g = y % 20 === 0; S("line", { x1: x(y), x2: x(y), y1: 20, y2: Hh - 24, style: "stroke:var(--rule)", "stroke-opacity": g ? .9 : .4 }, svg); if (g) S("text", { x: x(y), y: 12, "text-anchor": "middle" }, svg).textContent = y; }
+  MISSING.forEach(y => S("rect", { x: x(y), y: 20, width: Math.max(2, x(y + 1) - x(y)), height: Hh - 44, style: "fill:var(--muted)", opacity: .12 }, svg));
+  const rowOf = {}; list.forEach((c, i) => rowOf[c.id] = i);
+  const barY = i => TOP + i * ROW + 20;
+  list.forEach(c => { if (c.from !== null && rowOf[c.from] !== undefined) { const p = COURSES[c.from], x1 = c.a > p.b ? x(p.b + 1) : x(c.a) + 3, y1 = barY(rowOf[p.id]) + 5, x2 = x(c.a), y2 = barY(rowOf[c.id]) + 5, mx = (x1 + x2) / 2; S("path", { d: `M${x1},${y1} C${mx + 30},${y1} ${mx - 30},${y2} ${x2},${y2}`, fill: "none", style: "stroke:var(--lake)", "stroke-width": 1.6 }, svg); S("circle", { cx: x2, cy: y2, r: 3, style: "fill:var(--lake)" }, svg); } });
+  const det = state.linDetail != null && rowOf[state.linDetail] !== undefined ? state.linDetail : (state.sel.type === "course" ? state.sel.id : list[list.length - 1].id);
+  list.forEach((c, i) => {
+    const top = TOP + i * ROW;
+    const t = S("text", { x: Math.min(x(c.a), W - 220), y: top + 13, class: "t" }, svg); t.textContent = c.t;
+    if (c.id === det) t.setAttribute("style", "font-weight:600;fill:var(--accent)");
+    const yrs = S("text", { x: W, y: top + 13, "text-anchor": "end" }, svg); yrs.textContent = `${c.a} to ${c.b === Y1 ? "present" : c.b}`;
+    const bar = S("rect", { class: "bar", x: x(c.a), y: barY(i), width: Math.max(3, x(c.b + 1) - x(c.a)), height: 10, rx: 1, style: c.verified ? "fill:var(--maroon)" : "fill:var(--h2);stroke:var(--maroon);stroke-dasharray:3 2" }, svg);
+    (TEACH[c.id] || []).slice(1).forEach(sg => S("line", { x1: x(sg.from), x2: x(sg.from), y1: barY(i), y2: barY(i) + 10, style: "stroke:var(--band)", "stroke-width": 1.5 }, svg));
+    WAR.forEach(y => { if (!c.core && c.a >= 1905 && y >= c.a && y <= c.b) S("rect", { x: x(y), y: barY(i), width: x(y + 1) - x(y), height: 10, style: "fill:var(--band)" }, svg); });
+    bar.addEventListener("click", () => { state.linDetail = c.id; renderLineage(); });
+    bar.addEventListener("mousemove", e => { const f = instructorFor(c, Math.max(c.a, Math.min(c.b, Math.round(Y0 + (e.offsetX / W) * (Y1 - Y0 + 1))))); showTip(e, `<b>${c.t}</b><br>${SUBJECTS[c.s]}<br>${f ? "Taught then by " + f.name : ""}<br><span style="opacity:.7">Click for details</span>`); });
+    bar.addEventListener("mouseleave", hideTip);
+  });
+  S("text", { x: 0, y: Hh - 4 }, svg).textContent = "Solid bars are verified by a librarian. Dashed bars are machine-extracted. White ticks mark a change of instructor.";
+  S("line", { id: "linYear", y1: 20, y2: Hh - 24, style: "stroke:var(--ink)", "stroke-opacity": .55 }, svg);
+  renderLinYear();
+  renderLinDetail(COURSES[det]);
+}
+function renderLinYear() { const l = document.getElementById("linYear"); if (l && linX) { const xx = (linX(state.year) + linX(state.year + 1)) / 2; l.setAttribute("x1", xx); l.setAttribute("x2", xx); } }
+function renderLinDetail(c) {
+  const d = $("linDetail");
+  if (!c) { d.innerHTML = `<div class="ttl">Course details</div><p class="sub">Select a course to see who taught it, what came before, and what came after.</p>`; return; }
+  const segs = TEACH[c.id] || [], nCat = YEARS.filter(y => active(c, y) && !MISSING.has(y)).length;
+  const prev = c.from !== null ? COURSES[c.from] : null, next = c.to.map(i => COURSES[i]);
+  d.innerHTML = "";
+  d.append(H("div", { class: "ttl", text: c.t }), H("div", { class: "sub", text: `${SUBJECTS[c.s]}, Law ${c.num}` }));
+  const dl = H("dl");
+  const row = (k, v) => { dl.append(H("dt", { text: k })); dl.append(H("dd", {}, v)); };
+  row("Offered", `${ay(c.a)} to ${c.b === Y1 ? "present" : ay(c.b)}`);
+  row("Catalogs", `${nCat}`);
+  row("Credits", `${c.credits} hours`);
+  row("Record", c.verified ? "Verified by a librarian" : "Machine-extracted, awaiting review");
+  if (prev) row("Preceded by", H("a", { href: "#lineage", text: prev.t, onclick: e => { e.preventDefault(); state.linDetail = prev.id; state.sel = { type: "course", id: prev.id }; refreshSelection(); } }));
+  if (next.length) { const sp = H("span"); next.forEach((n, i) => { if (i) sp.append(", "); sp.append(H("a", { href: "#lineage", text: n.t, onclick: e => { e.preventDefault(); state.linDetail = n.id; state.sel = { type: "course", id: n.id }; refreshSelection(); } })); }); row("Succeeded by", sp); }
+  const ins = H("span"); segs.slice(-6).forEach((sg, i) => { if (i) ins.append(H("br")); ins.append(H("a", { href: "#faculty", text: FAC[sg.f].name, onclick: () => { state.fac = sg.f; renderProfile(); } }), ` ${sg.from}${sg.to !== sg.from ? "–" + String(sg.to).slice(-2) : ""}`); });
+  if (segs.length > 6) ins.prepend(H("span", { style: "color:var(--muted)", text: `${segs.length - 6} earlier instructors, then ` }), H("br"));
+  row("Taught by", ins);
+  d.append(dl);
+  d.append(H("div", { class: "dl-row" }, [H("button", { class: "btn ghost", type: "button", style: "padding:6px 10px;font-size:.75rem", text: "Open first catalog", onclick: () => { setYear(nearestOk(c.a)); $("catalog").scrollIntoView(); } }), H("button", { class: "btn ghost", type: "button", style: "padding:6px 10px;font-size:.75rem", text: "Open latest catalog", onclick: () => { setYear(nearestOk(c.b)); $("catalog").scrollIntoView(); } })]));
+}
+
+/* ======================= FACULTY ======================= */
+function lineChart(svg, series, opts = {}) {
+  const W = Math.max(280, svg.parentNode.clientWidth), Hh = opts.h || 86, P = { l: 0, r: 0, t: 6, b: 16 };
+  svg.innerHTML = ""; svg.setAttribute("width", W); svg.setAttribute("height", Hh);
+  const max = opts.max || Math.max(...series) * 1.08, min = opts.log ? Math.min(...series) * .8 : 0;
+  const X = i => P.l + i / (series.length - 1) * (W - P.l - P.r);
+  const Y = v => opts.log ? Hh - P.b - (Math.log(v) - Math.log(min)) / (Math.log(max) - Math.log(min)) * (Hh - P.t - P.b) : Hh - P.b - (v - min) / (max - min) * (Hh - P.t - P.b);
+  for (let y = 1920; y <= 2020; y += 20) { S("line", { x1: X(yi(y)), x2: X(yi(y)), y1: P.t, y2: Hh - P.b, style: "stroke:var(--rule)" }, svg); S("text", { x: X(yi(y)), y: Hh - 3, "text-anchor": "middle" }, svg).textContent = y; }
+  let d = ""; series.forEach((v, i) => d += (i ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1));
+  S("path", { d: d + `L${X(series.length - 1)},${Hh - P.b}L${X(0)},${Hh - P.b}Z`, style: `fill:${opts.fill || "var(--maroon)"};fill-opacity:.12` }, svg);
+  S("path", { d, fill: "none", style: `stroke:${opts.fill || "var(--maroon)"}`, "stroke-width": 1.8 }, svg);
+  const i = yi(state.year);
+  S("line", { x1: X(i), x2: X(i), y1: P.t, y2: Hh - P.b, style: "stroke:var(--ink)", "stroke-opacity": .5 }, svg);
+  S("circle", { cx: X(i), cy: Y(series[i]), r: 4, style: `fill:${opts.fill || "var(--maroon)"};stroke:var(--bg)`, "stroke-width": 2 }, svg);
+  return { X, Y, W, Hh };
+}
+const RATIO = ENTER.map((e, i) => +(e * 3 / FAC_COUNT[i]).toFixed(1));
+function renderFacCharts() {
+  const i = yi(state.year);
+  lineChart($("chFac"), FAC_COUNT); $("mFac").textContent = `${FAC_COUNT[i]} in ${state.year}`;
+  lineChart($("chEnt"), ENTER, { fill: "var(--lake)" }); $("mEnt").textContent = `${ENTER[i]} in ${state.year}`;
+  lineChart($("chRat"), RATIO, { fill: "var(--h3)" }); $("mRat").textContent = `${RATIO[i]} in ${state.year}`;
+}
+function mainSubj(f) { const n = {}; f.teach.forEach(t => { const s = COURSES[t.c].s; n[s] = (n[s] || 0) + (t.to - t.from + 1); }); const k = Object.keys(n).sort((a, b) => n[b] - n[a]).slice(0, 2).map(Number); return k.length ? k : f.subj; }
+function renderProfile() {
+  const f = FAC[state.fac], p = $("profile");
+  $("facQ").value = f.name;
+  const items = f.teach.slice().sort((a, b) => a.from - b.from);
+  const span = `${f.start} to ${f.endShown ? f.endShown : "present"}`;
+  p.innerHTML = `<div class="nm">${f.name}</div><div class="meta">On the faculty ${span}. Teaches mostly in ${mainSubj(f).map(s => SUBJECTS[s].toLowerCase()).join(" and ")}. Listed in ${YEARS.filter(y => y >= f.start && y <= Math.min(f.end, Y1) && !MISSING.has(y)).length} catalogs.</div>`;
+  const svg = S("svg", {}); p.append(svg);
+  const W = Math.max(300, p.clientWidth - 44), a0 = f.start, a1 = Math.min(Y1, f.end), span0 = Math.max(10, a1 - a0 + 1), ROW = 30, Hh = 26 + Math.max(1, items.length) * ROW;
+  svg.setAttribute("width", W); svg.setAttribute("height", Hh);
+  const x = y => (y - a0) / span0 * W;
+  for (let y = Math.ceil(a0 / 5) * 5; y <= a0 + span0; y += 5) { S("line", { x1: x(y), x2: x(y), y1: 14, y2: Hh, style: "stroke:var(--rule)" }, svg); if ((y - Math.ceil(a0 / 5) * 5) % 10 === 0) S("text", { x: x(y), y: 10, "text-anchor": "middle" }, svg).textContent = y; }
+  if (!items.length) S("text", { x: 0, y: 40 }, svg).textContent = "No courses assigned in the catalogs yet.";
+  items.forEach((it, i) => {
+    const c = COURSES[it.c], top = 22 + i * ROW;
+    const r = S("rect", { x: x(it.from), y: top + 12, width: Math.max(4, x(it.to + 1) - x(it.from)), height: 8, rx: 1, style: "fill:var(--maroon);cursor:pointer" }, svg);
+    S("text", { x: Math.min(x(it.from), W - 200), y: top + 9, style: "fill:var(--ink);font-family:var(--serif);font-size:13.5px" }, svg).textContent = `${c.t}, ${it.from}${it.to !== it.from ? "–" + it.to : ""}`;
+    r.addEventListener("click", () => { state.sel = { type: "course", id: c.id }; state.linDetail = c.id; refreshSelection(); $("lineage").scrollIntoView(); });
+  });
+}
+(function bindFaculty() {
+  const dl = $("facList"); FAC.slice().sort((a, b) => a.last.localeCompare(b.last)).forEach(f => dl.append(H("option", { value: f.name })));
+  $("facQ").addEventListener("change", e => { const f = FAC.find(x => x.name.toLowerCase() === e.target.value.trim().toLowerCase()); if (f) { state.fac = f.id; renderProfile(); writeHash(); } });
+  $("facRand").addEventListener("click", () => { const pool = FAC.filter(f => f.teach.length >= 2); state.fac = pool[Math.floor(Math.random() * pool.length)].id; renderProfile(); writeHash(); });
+  const best = FAC.filter(f => f.start >= 1945 && f.start <= 1975 && f.teach.length >= 4 && f.teach.length <= 8).sort((a, b) => (b.end - b.start) - (a.end - a.start))[0] || FAC[0];
+  state.fac = best.id;
+})();
+
+/* ======================= TUITION ======================= */
+let tuGeom = null;
+function renderTuition() {
+  const series = state.tu === "real" ? REAL : TUITION;
+  const svg = $("tuSvg");
+  tuGeom = lineChart(svg, series, { h: 300, fill: "var(--maroon)", log: state.tu === "nominal", max: Math.max(...series) * 1.1 });
+  const i = yi(state.year);
+  const endY = Math.min(tuGeom.Y(series[YEARS.length - 1]), tuGeom.Y(Math.max(...series.slice(-15)))) - 12;
+  [0, YEARS.length - 1].forEach(k => S("text", { x: k ? tuGeom.W - 2 : 2, y: k ? Math.max(14, endY) : tuGeom.Y(series[k]) - 10, "text-anchor": k ? "end" : "start", style: "fill:var(--ink);font-family:var(--serif);font-size:15px" }, svg).textContent = `${fmt$(series[k])} in ${YEARS[k]}`);
+  if (state.tu === "nominal") S("text", { x: 4, y: 290 - 22 }, svg).textContent = "Logarithmic scale";
+  $("tuRead").innerHTML = MISSING.has(state.year) ? `No catalog for ${ay(state.year)}, so no printed tuition.` : `In ${ay(state.year)}, a year cost <b>${fmt$(TUITION[i])}</b> as printed, about <b>${fmt$(REAL[i])}</b> in 2027 dollars.`;
+}
+document.querySelectorAll("#tuSeg button").forEach(b => b.addEventListener("click", () => { state.tu = b.dataset.t; document.querySelectorAll("#tuSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderTuition(); }));
+$("tuSvg").addEventListener("mousemove", e => {
+  if (!tuGeom) return; const i = Math.max(0, Math.min(YEARS.length - 1, Math.round(e.offsetX / tuGeom.W * (YEARS.length - 1)))), y = YEARS[i];
+  showTip(e, MISSING.has(y) ? `<b>${ay(y)}</b><br>No catalog located` : `<b>${ay(y)}</b><br>${fmt$(TUITION[i])} as printed<br>${fmt$(REAL[i])} in 2027 dollars`);
+});
+$("tuSvg").addEventListener("mouseleave", hideTip);
+$("tuSvg").addEventListener("click", e => { if (tuGeom) setYear(YEARS[Math.round(e.offsetX / tuGeom.W * (YEARS.length - 1))]); });
+
+/* ======================= WORDS OF THE DECADE ======================= */
+(function renderWords() {
+  const STOP = new Set(["and", "the", "of", "law", "i", "ii", "to", "in", "a", "for", "on", "seminar", "introduction", "workshop", "topics", "problems"]);
+  const tok = t => t.toLowerCase().replace(/[^a-z\s-]/g, " ").split(/\s+/).filter(w => w.length > 2 && !STOP.has(w));
+  const dec = {}, all = {}; let allN = 0;
+  YEARS.forEach(y => { if (MISSING.has(y)) return; const d = Math.floor(y / 10) * 10; dec[d] = dec[d] || { c: {}, n: 0 };
+    const titles = coursesIn(y).map(c => c.t).concat(...SUBJECTS.map((_, s) => seminarList(s, y)));
+    titles.forEach(t => tok(t).forEach(w => { dec[d].c[w] = (dec[d].c[w] || 0) + 1; dec[d].n++; all[w] = (all[w] || 0) + 1; allN++; })); });
+  const box = $("decades");
+  Object.keys(dec).sort().forEach(d => {
+    const D = dec[d];
+    const scored = Object.entries(D.c).map(([w, c]) => [w, (c / D.n) / (all[w] / allN) * Math.log(1 + c)]).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const top = scored[0] ? scored[0][1] : 1;
+    const col = H("div", { class: "dec" }, H("div", { class: "y", text: d + "s" }));
+    scored.forEach(([w, sc]) => col.append(H("button", { class: "w", type: "button", style: `font-size:${(0.88 + 0.5 * sc / top).toFixed(2)}rem;opacity:${(0.55 + 0.45 * sc / top).toFixed(2)}`, text: w, onclick: () => { $("linQ").value = w; state.sel = { type: "term", q: w }; refreshSelection(); $("lineage").scrollIntoView(); } })));
+    box.append(col);
+  });
+  box.append(H("div", { class: "dec", style: "color:var(--muted);font-size:.8125rem;display:flex;align-items:flex-end" }, H("p", { style: "margin:0", text: "Word size shows how unusual a word is for its decade. Seminar titles count alongside regular courses." })));
+})();
+
+/* ======================= LOST COURSES ======================= */
+function renderCards() {
+  const box = $("cards"); box.innerHTML = "";
+  let list;
+  if (state.lost === "extinct") list = COURSES.filter(c => c.b < Y1 && !c.to.length).sort((a, b) => a.b - b.b);
+  else if (state.lost === "renamed") list = COURSES.filter(c => c.b < Y1 && c.to.length).sort((a, b) => a.b - b.b);
+  else list = COURSES.filter(c => c.a >= 2005).sort((a, b) => b.a - a.a);
+  list.forEach(c => {
+    const nCat = YEARS.filter(y => active(c, y) && !MISSING.has(y)).length;
+    const line = state.lost === "extinct" ? `${c.a} to ${c.b}, in ${nCat} catalogs` : state.lost === "renamed" ? `${c.a} to ${c.b}, then became ${c.to.map(i => COURSES[i].t).join(" and ")}` : `First offered ${ay(c.a)}`;
+    box.append(H("button", { class: "icard", type: "button", onclick: () => { state.sel = { type: "course", id: c.id }; state.linDetail = c.id; refreshSelection(); $("lineage").scrollIntoView(); } }, [
+      H("span", { class: "call", text: `Law ${c.num}` }), H("div", { class: "ct", text: c.t }), H("div", { class: "cy", text: line }), H("div", { class: "cd", text: descFor(c, state.lost === "new" ? c.a : c.b) })
+    ]));
+  });
+}
+document.querySelectorAll("#lostSeg button").forEach(b => b.addEventListener("click", () => { state.lost = b.dataset.f; document.querySelectorAll("#lostSeg button").forEach(x => x.setAttribute("aria-pressed", x === b)); renderCards(); }));
+
+/* ======================= DATA QUALITY & DOWNLOADS ======================= */
+(function renderData() {
+  let recs = 0, ver = 0; const byDec = {};
+  YEARS.forEach(y => { const d = Math.floor(y / 10) * 10; byDec[d] = byDec[d] || { v: 0, m: 0, miss: 0, yrs: 0 }; byDec[d].yrs++;
+    if (MISSING.has(y)) { byDec[d].miss++; return; }
+    coursesIn(y).forEach(c => { recs++; if (c.verified) { ver++; byDec[d].v++; } else byDec[d].m++; });
+    SUBJECTS.forEach((_, s) => seminarList(s, y).forEach((t, k) => { recs++; if (hash(s, y, k, 4) > .45) { ver++; byDec[d].v++; } else byDec[d].m++; })); });
+  $("qstats").innerHTML = `<div><div class="v">${recs.toLocaleString()}</div><div class="k">course records</div></div><div><div class="v">${Math.round(ver / recs * 100)}%</div><div class="k">verified by a librarian</div></div><div><div class="v">${YEARS.length - MISSING.size} of ${YEARS.length}</div><div class="k">catalogs located</div></div>`;
+  const svg = $("qSvg"), W = Math.max(300, svg.parentNode.clientWidth), decs = Object.keys(byDec).sort(), bw = W / decs.length, Hh = 150;
+  svg.setAttribute("width", W); svg.setAttribute("height", Hh);
+  decs.forEach((d, i) => { const D = byDec[d], tot = D.v + D.m, mf = D.miss / D.yrs, vh = (1 - mf) * (D.v / (tot || 1)) * (Hh - 24), mh = (1 - mf) * (D.m / (tot || 1)) * (Hh - 24), xh = mf * (Hh - 24), x = i * bw + 2;
+    S("rect", { x, y: Hh - 18 - vh, width: bw - 4, height: vh, style: "fill:var(--maroon)" }, svg);
+    S("rect", { x, y: Hh - 18 - vh - mh, width: bw - 4, height: mh, style: "fill:var(--h1)" }, svg);
+    if (xh) S("rect", { x, y: Hh - 18 - vh - mh - xh, width: bw - 4, height: xh, fill: "url(#hatch2)" }, svg);
+    S("text", { x: x + bw / 2 - 2, y: Hh - 4, "text-anchor": "middle", style: "font-size:9.5px" }, svg).textContent = d; });
+  const defs = S("defs", {}, svg); const p = S("pattern", { id: "hatch2", width: 4, height: 4, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" }, defs); S("rect", { width: 1, height: 4, style: "fill:var(--muted)" }, p);
+})();
+function download(name, text, type) { const a = H("a", { href: URL.createObjectURL(new Blob([text], { type })), download: name }); document.body.append(a); a.click(); a.remove(); toast(`Downloaded ${name}`); }
+$("dlCsv").addEventListener("click", () => {
+  const esc = v => `"${String(v).replace(/"/g, '""')}"`;
+  const rows = [["id", "title", "subject", "course_number", "first_offered", "last_offered", "credits", "predecessor", "verified", "instructors"]];
+  COURSES.forEach(c => rows.push([c.id, c.t, SUBJECTS[c.s], c.num, c.a, c.b === Y1 ? "" : c.b, c.credits, c.from !== null ? COURSES[c.from].t : "", c.verified, (TEACH[c.id] || []).map(s => `${FAC[s.f].name} (${s.from}-${s.to})`).join("; ")]));
+  download("curriculum-genome-MOCK.csv", rows.map(r => r.map(esc).join(",")).join("\n"), "text/csv");
+});
+$("dlJson").addEventListener("click", () => download("curriculum-genome-MOCK.json", JSON.stringify({ note: "Invented demonstration data", subjects: SUBJECTS, courses: COURSES.map(c => ({ ...c, instructors: (TEACH[c.id] || []).map(s => ({ name: FAC[s.f].name, from: s.from, to: s.to })) })) }, null, 1), "application/json"));
+
+/* ======================= PLAY ======================= */
+let playT = null;
+function setPlayUI(on) { state.playing = on; $("playBtn").querySelector("span").textContent = on ? "Pause" : "Play"; $("playBtn").querySelector("svg").innerHTML = on ? '<path d="M3 2h4v12H3zM9 2h4v12H9z"/>' : '<path d="M4 2l10 6-10 6z"/>'; }
+function play(from) {
+  if (state.playing) { clearInterval(playT); setPlayUI(false); writeHash(); return; }
+  if (from !== undefined) setYear(from, { noHash: true }); else if (state.year >= Y1) setYear(Y0, { noHash: true });
+  setPlayUI(true);
+  playT = setInterval(() => { if (state.year >= Y1) { clearInterval(playT); setPlayUI(false); writeHash(); return; } setYear(state.year + 1, { noHash: true }); }, REDUCED ? 220 : 85);
+}
+$("playBtn").addEventListener("click", () => play());
+$("heroPlay").addEventListener("click", () => { $("genome").scrollIntoView(); if (state.playing) play(); setTimeout(() => play(Y0), 400); });
+
+/* ======================= TOUR ======================= */
+const n1902 = YEAR_TOTAL[0];
+const TOUR = [
+  { t: "A law school built in 1902", y: 1902, band: [1902, 1912], sel: null, go: "genome", p: `The first Announcement in this mock data lists ${n1902} courses, almost all in the subjects that still anchor the first year. The rest of the grid is empty, waiting to be filled.` },
+  { t: "Pleading gives way to procedure", y: 1939, band: [1902, 1950], sel: { type: "term", q: "pleading" }, go: "lineage", p: "Common Law Pleading and Code Pleading fade in the 1930s and Civil Procedure takes their place. The lineage view draws the handoff as a curved line." },
+  { t: "The war years", y: 1943, band: [1942, 1946], sel: null, go: "genome", p: "Electives vanish in 1918 and again in 1943 and 1944, leaving only the required core. Look for the vertical gaps running through the grid." },
+  { t: "Economics moves in", y: 1939, band: [1939, 1980], sel: { type: "subject", id: 12 }, go: "genome", p: "The Law and Economics Program was established in 1939, a real date. In the grid, the subject grows from a single course into a full row of courses and workshops." },
+  { t: "The great renaming", y: 1956, band: [1950, 1995], sel: { type: "course", id: byTitle["Payment Systems"].id }, go: "lineage", p: "Bills and Notes became Commercial Paper, which became Payment Systems. Same doctrine, three names, one unbroken line." },
+  { t: "The clinical turn", y: 1957, band: [1957, 2027], sel: { type: "subject", id: 21 }, go: "genome", p: "Clinics enter the catalog in the late 1950s and multiply after 2000, changing what a Chicago legal education looks like in practice." },
+  { t: "Code meets law", y: 2018, band: [1984, 2027], sel: { type: "term", q: "computer" }, go: "lineage", p: "Law and Computers in 1984, Cyberlaw in 1999, then privacy, cybersecurity, and AI. The newest row in the genome is the one changing fastest." },
+  { t: "Now find yourself", y: 2027, band: null, sel: null, go: "compare", p: "Enter your graduation year to put your first catalog next to today's." }
+];
+let tourI = -1;
+function tourStep(i) {
+  tourI = i; const s = TOUR[i], box = $("tour");
+  if (state.playing) play();
+  state.sel = s.sel; setYear(s.y); refreshSelection(); state.dimOn = !!s.sel; refreshDim(); setBand(s.band);
+  if (s.go === "compare") $("classYear").focus({ preventScroll: true });
+  $(s.go).scrollIntoView({ block: "start" });
+  box.innerHTML = `<div class="tt">${s.t}</div><p>${s.p}</p><div class="nav"><div class="pips">${TOUR.map((_, k) => `<i class="${k === i ? "on" : ""}"></i>`).join("")}</div><div style="display:flex;gap:8px"><button class="btn ghost" type="button" id="tPrev" ${i === 0 ? "disabled" : ""}>Back</button><button class="btn" type="button" id="tNext">${i === TOUR.length - 1 ? "Finish" : "Next"}</button><button class="btn ghost" type="button" id="tClose">Close</button></div></div>`;
+  box.classList.add("open");
+  $("tPrev").onclick = () => i > 0 && tourStep(i - 1);
+  $("tNext").onclick = () => i < TOUR.length - 1 ? tourStep(i + 1) : endTour();
+  $("tClose").onclick = endTour;
+}
+function endTour() { $("tour").classList.remove("open"); tourI = -1; setBand(null); }
+$("tourBtn").addEventListener("click", () => tourStep(0));
+
+/* ======================= KEYBOARD, HELP, HASH, NAV ======================= */
+const help = $("help");
+$("helpFab").onclick = () => help.classList.add("open"); $("helpClose").onclick = () => help.classList.remove("open");
+help.addEventListener("click", e => { if (e.target === help) help.classList.remove("open"); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeModal(); help.classList.remove("open"); endTour(); return; }
+  if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+  if ($("modal").classList.contains("open")) return;
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") { if (e.target.id === "yearRange") return; e.preventDefault(); if (tourI >= 0 && !e.shiftKey) { e.key === "ArrowRight" ? $("tNext").click() : (tourI > 0 && tourStep(tourI - 1)); return; } setYear(state.year + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 10 : 1)); }
+  else if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); play(); }
+  else if (e.key === "?") help.classList.add("open");
+  else if (e.key === "t" || e.key === "T") tourStep(0);
+});
+let hashT;
+function writeHash() {
+  clearTimeout(hashT);
+  hashT = setTimeout(() => {
+    const p = new URLSearchParams({ year: state.year, a: state.cmpA, b: state.cmpB });
+    if (state.sel) { if (state.sel.type === "subject") p.set("subject", state.sel.id); if (state.sel.type === "course") p.set("course", state.sel.id); if (state.sel.type === "term") p.set("q", state.sel.q); }
+    if (state.fac != null) p.set("prof", state.fac);
+    history.replaceState(null, "", "#" + p.toString());
+  }, 150);
+}
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.has("year")) state.year = Math.max(Y0, Math.min(Y1, +p.get("year") || state.year));
+  if (p.has("a")) state.cmpA = nearestOk(+p.get("a")); if (p.has("b")) state.cmpB = nearestOk(+p.get("b"));
+  if (p.has("subject")) state.sel = { type: "subject", id: +p.get("subject") };
+  if (p.has("course") && COURSES[+p.get("course")]) state.sel = { type: "course", id: +p.get("course") };
+  if (p.has("q")) { state.sel = { type: "term", q: p.get("q") }; $("linQ").value = p.get("q"); }
+  if (p.has("prof") && FAC[+p.get("prof")]) state.fac = +p.get("prof");
+}
+const navLinks = [...document.querySelectorAll(".secnav a")];
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) navLinks.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + en.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+document.querySelectorAll("section.block").forEach(s => io.observe(s));
+
+/* ======================= INIT ======================= */
+function countUp(el, to) { if (REDUCED) { el.textContent = to; return; } const t0 = performance.now(), d = 1400; (function f(t) { const p = Math.min(1, (t - t0) / d), e = 1 - Math.pow(1 - p, 3); el.textContent = Math.round(to * e); if (p < 1) requestAnimationFrame(f); })(t0); }
+readHash();
+fillSelects();
+renderGenome(true);
+setYear(state.year, { noHash: true });
+renderCompare();
+if (location.hash.match(/subject|course|q=/)) state.dimOn = true;
+renderLineage(); refreshDim();
+renderProfile();
+renderCards();
+countUp($("n1902"), YEAR_TOTAL[0]); countUp($("n2027"), YEAR_TOTAL[YEARS.length - 1]);
+let rzT; addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(() => { renderGenome(false); renderLineage(); renderFacCharts(); renderTuition(); renderProfile(); }, 150); });
+</script>
+</body>
+</html>
